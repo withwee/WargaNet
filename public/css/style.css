@@ -1,3 +1,13 @@
+@font-face {
+    font-family: 'PoppinsRegular';
+    src: url('../fonts/Poppins-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'PoppinsBold';
+    src: url('../Font/Poppins-ExtraBold.ttf') format('truetype');
+}
+
 * {
     font-family: 'Poppins', sans-serif;
     margin: 0;
@@ -17,7 +27,6 @@ body {
 .footer {
     padding: 15px;
     text-align: center;
-    background-color: #fff;
     color: #333;
     font-size: 14px;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
@@ -29,7 +38,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('../images/konoha.png');
+    background-image: url('../images/Background.png');
     background-size: cover;
     background-position: center;
     opacity: 0.5;   
@@ -48,27 +57,40 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 .navbar .logo {
-    color: #1f57c3;
+    color: #2C79FF;
     font-weight: bold;
     font-size: 24px;
 }
 
+.navbar .logo .normal {
+    font-weight: normal;
+    color: #2C79FF;
+}
+
+.logo .warga {
+    font-family: 'PoppinsBold';
+}
+
+.logo .net {
+    font-family: 'PoppinsRegular';
+}
+
 .hero {
-    height: 100vh;           /* 1 layar penuh */
+    height: 100vh;           
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Biar konten ketengah */
+    justify-content: center; 
     align-items: center;
     text-align: center;
     padding: 20px;
 }
 
 .hero h1 {
-    color: #1f57c3;
+    color: #2C79FF;
     font-size: 48px;
 }
 
@@ -78,12 +100,22 @@ body {
     color: #333;
 }
 
+.description-box {
+    background-color: rgba(255, 255, 255, 0.7);  /* Putih semi-transparan */
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 800px;
+    margin: 20px auto;
+    text-align: center;
+}
+
 .buttons {
-    margin-top: 30px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 .btn {
-    padding: 12px 30px;
+    padding: 8px 60px;
     border-radius: 8px;
     border: none;
     cursor: pointer;
@@ -91,29 +123,31 @@ body {
     text-decoration: none;
     margin: 10px;
     color: white;
-    background-color: #1f57c3;
+    background-color: #2C79FF;
     transition: background 0.3s;
 }
 
 .btn:hover {
-    background-color: #17469e;
+    background-color: #2C79FF;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
 }
 
-/* Admin Button */
 .btn-admin {
-    padding: 12px 30px;
+    padding: 8px 150px;
     border-radius: 8px;
-    border: 2px solid #1f57c3;
+    border: 2px solid #2C79FF;
     background-color: transparent;
-    color: #1f57c3;
+    color: #2C79FF;
     text-decoration: none;
     font-weight: 600;
     display: inline-block;
-    margin-top: 10px;
+    margin-top: 0px;
+    margin-bottom:0px;
     transition: background-color 0.3s, color 0.3s;
 }
 
 .btn-admin:hover {
-    background-color: #1f57c3;
+    background-color: #2C79FF ;
     color: white;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
 }
