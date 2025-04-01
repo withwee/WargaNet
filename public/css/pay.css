@@ -1,0 +1,117 @@
+* {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.sidebar {
+    height: 100vh;
+    background: #2C79FF;
+    padding: 20px;
+    color: white;
+    position: fixed;
+    width: 250px;
+}
+
+.sidebar .logo {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.sidebar span {
+    font-weight: 400;
+}
+
+.sidebar .nav-link {
+    color: white;
+    font-size: 16px;
+    padding: 10px 15px;
+}
+
+.sidebar .nav-item.active {
+    background: white;
+    border-radius: 10px;
+}
+
+.sidebar .nav-item.active .nav-link {
+    color: #2C79FF !important;
+    font-weight: bold;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.header h2 {
+    font-weight: bold;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+}
+
+.user-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 10px;
+}
+
+/* Search Box */
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.search-box input {
+    flex: 1;
+    height: 50px;
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.search-box button {
+    height: 50px;
+    padding: 0 20px;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+/* Tabel */
+.table {
+    margin-top: 10px;
+}
+
+.table th {
+    background: #f8f9fa;
+    text-align: center;
+}
+
+.table td {
+    text-align: center;
+}
+
+/* Status */
+.status-paid {
+    background: #DFF6DD;
+    color: #29A745;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+/* Warna row sudah bayar */
+.paid {
+    background: #E9F2FF;
+}
