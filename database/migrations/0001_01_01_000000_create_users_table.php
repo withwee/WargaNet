@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('nik', 16)->unique(); 
+            $table->string('no_kk', 16)->unique(); 
+            $table->string('phone', 15); 
+            $table->integer('jumlah_keluarga'); 
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
