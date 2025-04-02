@@ -120,4 +120,81 @@ class UserController extends Controller
 
         return view('dashboard', compact('user'));
     }
+
+       public function pengumuman()
+        {
+            try {
+                $token = JWTAuth::getToken() ?? session('jwt_token');
+                if (!$token) {
+                    return redirect()->route('login.view')->withErrors(['error' => 'Silakan login terlebih dahulu.']);
+                }
+        
+                $user = JWTAuth::setToken($token)->authenticate();
+                if (!$user) {
+                    return redirect()->route('login.view')->withErrors(['error' => 'User tidak ditemukan']);
+                }
+            } catch (TokenInvalidException | TokenExpiredException | JWTException $e) {
+                return redirect()->route('login.view')->withErrors(['error' => 'Token tidak valid atau kedaluwarsa']);
+            }
+        
+            return view('pengumuman');
+        }
+        
+
+        public function forum()
+        {
+            try {
+                $token = JWTAuth::getToken() ?? session('jwt_token');
+                if (!$token) {
+                    return redirect()->route('login.view')->withErrors(['error' => 'Silakan login terlebih dahulu.']);
+                }
+        
+                $user = JWTAuth::setToken($token)->authenticate();
+                if (!$user) {
+                    return redirect()->route('login.view')->withErrors(['error' => 'User tidak ditemukan']);
+                }
+            } catch (TokenInvalidException | TokenExpiredException | JWTException $e) {
+                return redirect()->route('login.view')->withErrors(['error' => 'Token tidak valid atau kedaluwarsa']);
+            }
+
+            return view('forum');
+        }
+
+        public function bayarIuran()
+        {
+            try {
+                $token = JWTAuth::getToken() ?? session('jwt_token');
+                if (!$token) {
+                    return redirect()->route('login.view')->withErrors(['error' => 'Silakan login terlebih dahulu.']);
+                }
+        
+                $user = JWTAuth::setToken($token)->authenticate();
+                if (!$user) {
+                    return redirect()->route('login.view')->withErrors(['error' => 'User tidak ditemukan']);
+                }
+            } catch (TokenInvalidException | TokenExpiredException | JWTException $e) {
+                return redirect()->route('login.view')->withErrors(['error' => 'Token tidak valid atau kedaluwarsa']);
+            }
+
+            return view('pay');
+        }
+
+        public function kalender()
+        {
+            try {
+                $token = JWTAuth::getToken() ?? session('jwt_token');
+                if (!$token) {
+                    return redirect()->route('login.view')->withErrors(['error' => 'Silakan login terlebih dahulu.']);
+                }
+        
+                $user = JWTAuth::setToken($token)->authenticate();
+                if (!$user) {
+                    return redirect()->route('login.view')->withErrors(['error' => 'User tidak ditemukan']);
+                }
+            } catch (TokenInvalidException | TokenExpiredException | JWTException $e) {
+                return redirect()->route('login.view')->withErrors(['error' => 'Token tidak valid atau kedaluwarsa']);
+            }
+            
+            return view('kalender');
+        }
 }

@@ -1,85 +1,74 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pembayaran Iuran | WargaNet</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ asset('css/pay.css') }}">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <title>Pembayaran Iuran</title>
+  
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <nav class="col-md-3 col-lg-2 d-md-block sidebar">
-                <h2 class="logo">Warga<span>Net</span></h2>
-                <ul class="nav flex-column">
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-bullhorn"></i> Pengumuman</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-comments"></i> Forum</a></li>
-                    <li class="nav-item active"><a href="#" class="nav-link"><i class="fas fa-wallet"></i> Bayar Iuran</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-calendar-alt"></i> Kalender</a></li>
-                </ul>
-            </nav>
-
-            <!-- Main Content -->
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div class="header">
-                    <h2>Bayar Iuran</h2>
-                    <div class="user-info">Cipengs<img src="avatar.png" alt="User"></div>
-                </div>
-
-                <!-- Input Pencarian -->
-                <div class="search-box">
-                    <input type="text" class="form-control" placeholder="Masukkan Nomor Kartu Keluarga">
-                    <button class="btn btn-primary"><i class="fas fa-search"></i> Cari</button>
-                </div>
-
-                <!-- Tabel Iuran -->
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <h5>Daftar Iuran</h5>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>ID Iuran</th>
-                                    <th>Nama</th>
-                                    <th>Jenis Iuran</th>
-                                    <th>Total Bayar</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>#20462</td>
-                                    <td>Dimas Arkaan</td>
-                                    <td>Iuran Sampah</td>
-                                    <td>Rp 125.000</td>
-                                    <td><button class="btn btn-primary"><i class="fas fa-wallet"></i> Bayar</button></td>
-                                </tr>
-                                <tr class="paid">
-                                    <td>#20463</td>
-                                    <td>Dimas Arkaan</td>
-                                    <td>Iuran Keamanan</td>
-                                    <td>Rp 25.000</td>
-                                    <td><span class="status-paid">Sudah Bayar</span></td>
-                                </tr>
-                                <tr class="paid">
-                                    <td>#20464</td>
-                                    <td>Dimas Arkaan</td>
-                                    <td>Iuran Acara 17 Agustus</td>
-                                    <td>Rp 55.000</td>
-                                    <td><span class="status-paid">Sudah Bayar</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </main>
+@extends('layouts.app')
+@section('content')
+<div class="bg-white p-4 rounded-xl space-y-6 h-screen">
+    <div class="flex items-center justify-center gap-4">
+        <input type="text" name="" id="" placeholder="Masukan nomor kartu keluarga" class="w-full rounded-3xl px-8 py-2 border border-black">
+        <div class="bg-blue-500 p-3 w-80 text-white flex items-center justify-center text-center gap-2 rounded-xl">
+        <iconify-icon icon="lets-icons:search" width="24" height="24"  style="color: #fff"></iconify-icon>
+        <p>Cari</p>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="space-y-3">
+        <h1 class="font-bold text-xl">Daftar Iuran</h1>
+        <div class="overflow-x-auto">
+  <table class="min-w-full border rounded-xl">
+    <thead class="bg-gray-100 text-left text-sm font-semibold text-gray-700">
+      <tr>
+        <th class="py-3 px-4">ID Iuran</th>
+        <th class="py-3 px-4">Nama</th>
+        <th class="py-3 px-4">Jenis Iuran</th>
+        <th class="py-3 px-4">Total Bayar</th>
+        <th class="py-3 px-4">Status</th>
+      </tr>
+    </thead>
+    <tbody class="text-sm text-gray-700">
+      <tr class="bg-gray-50">
+        <td class="py-3 px-4">#20462</td>
+        <td class="py-3 px-4">Dimas Arkaan</td>
+        <td class="py-3 px-4">Iuran Sampah</td>
+        <td class="py-3 px-4">Rp 125.000</td>
+        <td class="py-3 px-4">
+          <button class="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-xl">
+          <iconify-icon icon="mdi:money" width="24" height="24"  style="color: #fff"></iconify-icon>
+            Bayar
+          </button>
+        </td>
+      </tr>
+      <tr class="bg-blue-100">
+        <td class="py-3 px-4">#20463</td>
+        <td class="py-3 px-4">Dimas Arkaan</td>
+        <td class="py-3 px-4">Iuran Keamanan</td>
+        <td class="py-3 px-4">Rp 25.000</td>
+        <td class="py-3 px-4">
+          <span class="bg-green-100 text-green-600 px-4 py-1 rounded-full">Sudah Bayar</span>
+        </td>
+      </tr>
+      <tr class="bg-gray-50">
+        <td class="py-3 px-4">#20464</td>
+        <td class="py-3 px-4">Dimas Arkaan</td>
+        <td class="py-3 px-4">Iuran Acara 17 Agustus</td>
+        <td class="py-3 px-4">Rp 55.000</td>
+        <td class="py-3 px-4">
+          <span class="bg-green-100 text-green-600 px-4 py-1 rounded-full">Sudah Bayar</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+    </div>
+</div>
+
+    @endsection
 </body>
 </html>

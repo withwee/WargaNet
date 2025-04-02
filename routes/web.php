@@ -18,6 +18,10 @@ Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 // Protected routes
 Route::middleware('auth.custom')->group(function () {
     Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
+    Route::get('/pengumuman', [UserController::class, 'pengumuman'])->name('pengumuman');
+    Route::get('/forum', [UserController::class, 'forum'])->name('forum');
+    Route::get('/bayar-iuran', [UserController::class, 'bayarIuran'])->name('bayar-iuran');
+    Route::get('/kalender', [UserController::class, 'kalender'])->name('kalender');
 });
 
 
