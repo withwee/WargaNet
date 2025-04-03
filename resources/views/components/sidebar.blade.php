@@ -33,11 +33,6 @@
             <iconify-icon icon="mdi:calendar-month-outline" class="text-xl"></iconify-icon>
             Kalender
         </a>
-        <form action="{{ route('logout') }}" method="POST"
-              class="flex items-center gap-3 text-red-500 bg-white py-2 px-4 rounded-xl transition">
-            @csrf
-            <iconify-icon icon="mdi:logout" class="text-xl"></iconify-icon>
-            <button type="submit" class="logout-button">Logout</button>
-        </form>
+        
     </nav>
 </aside>

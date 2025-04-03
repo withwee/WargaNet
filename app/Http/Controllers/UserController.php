@@ -13,35 +13,6 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 
 class UserController extends Controller
 {
-    // Proses registrasi user
-    public function register(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|max:12|confirmed',
-            'nik'      => 'required|digits:16|unique:users,nik',
-            'no_kk'    => 'required|digits:16|unique:users,no_kk',
-            'phone'    => 'required|string|max:15',
-            'jumlah_keluarga' => 'required|integer|min:1',
-        ]);
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
-
-        User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'nik'      => $request->nik,
-            'no_kk'    => $request->no_kk,
-            'phone'    => $request->phone,
-            'jumlah_keluarga' => $request->jumlah_keluarga,
-        ]);
-
-        return redirect()->route('login.view')->with('message', 'Registrasi berhasil, silakan login.');
-    }
 
     // Proses login user
     public function login(Request $request)
@@ -53,6 +24,18 @@ class UserController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
+        }
+
+        if (User::count() == 0) {
+            $dummyUser = User::create([
+                'name'     => 'Admin',
+                'email'    => 'admin@gmail.com',
+                'password' => Hash::make('password123'),
+                'nik'      => '1234567890123456',
+                'no_kk'    => '1234567890123456',
+                'phone'    => '08123456789',
+                'jumlah_keluarga' => 1,
+            ]);
         }
 
         $user = User::where('nik', $request->nik)->first();
@@ -67,7 +50,6 @@ class UserController extends Controller
             return back()->withErrors(['error' => 'Terjadi kesalahan saat membuat token'])->withInput();
         }
 
-        // Simpan data user ke dalam session
         session([
             'jwt_token' => $token,
             'user' => [
@@ -77,22 +59,6 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('dashboard')->with('message', 'Login berhasil');
-    }
-
-    // Logout user dan hapus token
-    public function logout()
-    {
-        try {
-            if (session()->has('jwt_token')) {
-                JWTAuth::invalidate(session('jwt_token'));
-            }
-        } catch (JWTException $e) {
-            // Abaikan error jika token tidak valid atau sudah expired
-        }
-
-        session()->forget(['jwt_token', 'user']);
-
-        return redirect()->route('login.view')->with('message', 'Logout berhasil');
     }
 
     // Dashboard user yang memerlukan autentikasi
