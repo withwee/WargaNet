@@ -31,7 +31,7 @@
         </div>
 
         <p style="margin-top: 30px; font-weight: 500;">Masuk sebagai Admin:</p>
-        <a href="/admin" class="btn-admin">Admin</a>
+        <a href="/login" class="btn-admin">Admin</a>
 
     </div>
 </div> 
