@@ -3,12 +3,14 @@
         <span class="font-extrabold">Warga</span><span class="text-gray-200">Net</span>
     </div>
     <nav class="flex flex-col gap-4">
-        <a href="{{ route('dashboard') }}"
-           class="flex items-center gap-3 py-2 px-4 rounded-xl font-semibold transition 
-           {{ request()->routeIs('dashboard') ? 'bg-white text-blue-600' : 'text-gray-200 hover:text-white hover:bg-blue-500' }}">
+        <a href="{{ Auth::user()->role === 'admin' ? route('dashboard') : '#' }}"
+            class="flex items-center gap-3 py-2 px-4 rounded-xl font-semibold transition 
+            {{ request()->routeIs('dashboard') ? 'bg-white text-blue-600' : 'text-gray-200 hover:text-white hover:bg-blue-500' }}
+            {{ Auth::user()->role === 'user' ? 'pointer-events-none opacity-50' : '' }}">
             <iconify-icon icon="mdi:view-dashboard" class="text-xl"></iconify-icon>
             Dashboard
         </a>
+
         <a href="{{ route('pengumuman') }}"
            class="flex items-center gap-3 py-2 px-4 rounded-xl transition 
            {{ request()->routeIs('pengumuman') ? 'bg-white text-blue-600' : 'text-gray-200 hover:text-white hover:bg-blue-500' }}">
@@ -33,6 +35,11 @@
             <iconify-icon icon="mdi:calendar-month-outline" class="text-xl"></iconify-icon>
             Kalender
         </a>
-        
+        <form action="{{ route('logout') }}" method="POST"
+              class="flex items-center gap-3 text-red-500 bg-white py-2 px-4 rounded-xl transition">
+            @csrf
+            <iconify-icon icon="mdi:logout" class="text-xl"></iconify-icon>
+            <button type="submit" class="logout-button">Logout</button>
+        </form>
     </nav>
 </aside>

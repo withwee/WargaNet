@@ -10,6 +10,8 @@ Route::middleware('redirect.custom')->group(function () {
     Route::post('/register', [UserController::class, 'register'])->name('register');
     Route::get('/login', fn () => view('login'))->name('login.view');
     Route::post('/login', [UserController::class, 'login'])->name('login');
+    Route::get('/admin', fn () => view('admin'))->name('admin.view');
+    Route::post('/admin', [UserController::class, 'loginAdmin'])->name('admin');
 });
 
 // Logout tetap bisa
