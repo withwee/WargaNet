@@ -19,10 +19,16 @@ return new class extends Migration
             $table->string('no_kk', 16)->unique(); 
             $table->string('phone', 15); 
             $table->integer('jumlah_keluarga'); 
+            $table->string('role')->default('user'); 
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+        });
+        
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('role')->default('user'); // Nilai default adalah 'user'
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -46,6 +52,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('role');
+        });
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
