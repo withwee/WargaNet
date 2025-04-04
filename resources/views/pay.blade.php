@@ -53,21 +53,21 @@
                             <tbody>
                                 <tr>
                                     <td>#20462</td>
-                                    <td>Dimas Arkaan</td>
+                                    <td>Cipengs</td>
                                     <td>Iuran Sampah</td>
                                     <td>Rp 125.000</td>
                                     <td><button class="btn btn-primary"><i class="fas fa-wallet"></i> Bayar</button></td>
                                 </tr>
                                 <tr class="paid">
                                     <td>#20463</td>
-                                    <td>Dimas Arkaan</td>
+                                    <td>Cipengs</td>
                                     <td>Iuran Keamanan</td>
                                     <td>Rp 25.000</td>
                                     <td><span class="status-paid">Sudah Bayar</span></td>
                                 </tr>
                                 <tr class="paid">
                                     <td>#20464</td>
-                                    <td>Dimas Arkaan</td>
+                                    <td>Cipengs</td>
                                     <td>Iuran Acara 17 Agustus</td>
                                     <td>Rp 55.000</td>
                                     <td><span class="status-paid">Sudah Bayar</span></td>
