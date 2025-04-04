@@ -12,10 +12,6 @@
 <div class="background"></div>
     <div class="navbar">
     <div class="logo"><span class="warga">Warga</span><span class="net">Net</span></div>
-        <div>
-            <a href="#">Home</a>
-            <a href="/login" class="btn">Login</a>
-        </div>
     </div>
 
     <div class="hero">

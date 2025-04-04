@@ -24,6 +24,7 @@ Route::middleware('auth.custom')->group(function () {
     Route::get('/forum', [UserController::class, 'forum'])->name('forum');
     Route::get('/bayar-iuran', [UserController::class, 'bayarIuran'])->name('bayar-iuran');
     Route::get('/kalender', [UserController::class, 'kalender'])->name('kalender');
+    Route::get('/pay', [UserController::class, 'pembayaran'])->name('pembayaran');
 });
 
 
