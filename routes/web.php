@@ -16,7 +16,7 @@ Route::middleware('redirect.custom')->group(function () {
 
 // Logout tetap bisa
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
-
+    
 // Protected routes
 Route::middleware('auth.custom')->group(function () {
     Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
