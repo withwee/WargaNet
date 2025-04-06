@@ -25,11 +25,6 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
-        
-
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('role')->default('user'); // Nilai default adalah 'user'
-        });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
@@ -38,7 +33,7 @@ return new class extends Migration
         });
 
         Schema::create('sessions', function (Blueprint $table) {
-            $table->string('id')->primary();
+            $table->string('id')->primary();    
             $table->foreignId('user_id')->nullable()->index();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
