@@ -234,4 +234,23 @@ class UserController extends Controller
             
             return view('kalender');
         }
+
+        public function pembayaran()
+        {
+            try {
+                $token = JWTAuth::getToken() ?? session('jwt_token');
+                if (!$token) {
+                    return redirect()->route('login.view')->withErrors(['error' => 'Silakan login terlebih dahulu.']);
+                }
+        
+                $user = JWTAuth::setToken($token)->authenticate();
+                if (!$user) {
+                    return redirect()->route('login.view')->withErrors(['error' => 'User tidak ditemukan']);
+                }
+            } catch (TokenInvalidException | TokenExpiredException | JWTException $e) {
+                return redirect()->route('login.view')->withErrors(['error' => 'Token tidak valid atau kedaluwarsa']);
+            }
+            
+            return view('pay');
+        }
 }

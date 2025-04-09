@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pembayaran Iuran</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-
-    <style>
+@extends('layouts.app')
+@section('content')
+<style>
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #f8f9fa;
@@ -82,25 +74,7 @@
         }
 
     </style>
-</head>
-<body>
-<div class="container-fluid">
-    <div class="row">
-        <!-- Sidebar -->
-        <nav class="col-md-3 col-lg-2 d-md-block sidebar">
-            <h2 class="logo">Warga<span>Net</span></h2>
-            <ul class="nav flex-column">
-                <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-home me-2"></i> Dashboard</a></li>
-                <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-bullhorn me-2"></i> Pengumuman</a></li>
-                <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-comments me-2"></i> Forum</a></li>
-                <li class="nav-item active"><a href="#" class="nav-link"><i class="fas fa-wallet me-2"></i> Bayar Iuran</a></li>
-                <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-calendar-alt me-2"></i> Kalender</a></li>
-            </ul>
-        </nav>
-
-        <!-- Main Content -->
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="header">
+<div class="header">
                 <h2>Bayar Iuran</h2>
                 <div class="user-info">
                     Cipengs
@@ -154,8 +128,4 @@
                     </table>
                 </div>
             </div>
-        </main>
-    </div>
-</div>
-</body>
-</html>
+@endsection
