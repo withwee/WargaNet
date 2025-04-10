@@ -9,23 +9,27 @@
     
     @stack('styles')
 </head>
-<body class="ml-64">
-    <x-sidebar/>
-    <main class="w-full p-6 bg-sky-100 min-h-screen">
-        <div class="flex justify-between items-center mb-6">
-            <div class="flex gap-2">
-                <h1 class="font-bold text-3xl"> {{ ucfirst(str_replace('-', ' ', Route::currentRouteName())) }}</h1>
-               
+<body>
+    <div class="flex">
+        <x-sidebar/>
+        <main class="w-full p-6 bg-sky-100 min-h-screen ml-64">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex gap-2">
+                    <h1 class="font-bold text-3xl">
+                        {{ ucfirst(str_replace('-', ' ', Route::currentRouteName())) }}
+                    </h1>
+                </div>
+                <div class="flex items-center gap-4">
+                    <h1>{{ $user->name ?? 'Guest' }}</h1>
+                    <img src="{{ asset('images/profile.png') }}" alt="profile" class="w-10 h-10 rounded-full">
+                </div>
             </div>
-            <div class="flex items-center gap-4">
-                <h1>{{ $user->name ?? 'Guest' }}</h1>
-                <img src="{{ asset('images/profile.png') }}" alt="profile" class="w-10 h-10 rounded-full">
-            </div>
-        </div>
 
-        @yield('content')
-    </main>
+            @yield('content')
+        </main>
+    </div>
 
     @stack('scripts')
 </body>
+
 </html>
