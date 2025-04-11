@@ -10,7 +10,7 @@
 @section('content')
 <div class="space-y-3">
    <h1>Pengumuman</h1>
-
+   <!-- buat frontend disini -->
 </div>
 
 @endsection
