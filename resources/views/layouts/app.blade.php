@@ -6,7 +6,7 @@
     <title>@yield('title', 'Dashboard - Warganet')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     @stack('styles')
 </head>
 <body>

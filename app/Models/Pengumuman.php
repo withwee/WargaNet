@@ -3,12 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HashFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Pengumuman extends Model
 {
-    use HashFactory;
-    protected $fillable=[
+    use HasFactory;
+
+    protected $table = 'pengumumans';
+
+    protected $fillable = [
         'judulPengumuman',
         'isiPengumuman'
     ];
