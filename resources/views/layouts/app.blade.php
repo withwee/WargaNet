@@ -10,7 +10,7 @@
     @stack('styles')
 </head>
 <body>
-    <div class="flex">
+    <div class="flex font-[Poppins]">
         <x-sidebar/>
         <main class="w-full p-6 bg-sky-100 min-h-screen ml-64">
             <div class="flex justify-between items-center mb-6">
