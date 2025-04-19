@@ -31,7 +31,7 @@
         {{-- Bayar Iuran --}}
         <a href="{{ route('bayar-iuran') }}"
            class="flex items-center gap-3 py-2 px-4 rounded-xl font-semibold transition
-           {{ request()->routeIs('bayar-iuran') ? ''bg-white text-blue-600' 'text-white hover:text-white hover:bg-blue-500' }}">
+           {{ request()->routeIs('bayar-iuran') ? 'bg-white text-blue-600' 'text-white hover:text-white hover:bg-blue-500' }}">
             <iconify-icon icon="mdi:cash-multiple" class="text-xl"></iconify-icon>
             Bayar Iuran
         </a>
