@@ -5,10 +5,9 @@
     <nav class="flex flex-col gap-4">
 
         {{-- Dashboard --}}
-        <a href="{{ Auth::user()->role === 'admin' ? route('dashboard') : '#' }}"
-            class="flex items-center gap-3 py-2 px-4 rounded-xl font-semibold transition
-            {{ request()->routeIs('dashboard') ? 'bg-white text-blue-600' : 'text-white hover:text-white hover:bg-blue-500' }}
-            {{ Auth::user()->role === 'user' ? 'pointer-events-none opacity-50' : '' }}">
+        <a href="{{ route('dashboard') }}"
+        class="flex items-center gap-3 py-2 px-4 rounded-xl font-semibold transition
+        {{ request()->routeIs('dashboard') ? 'bg-white text-blue-600' : 'text-white hover:text-white hover:bg-blue-500' }}">
             <iconify-icon icon="mdi:view-dashboard" class="text-xl"></iconify-icon>
             Dashboard
         </a>

@@ -57,10 +57,6 @@ class UserController extends Controller
             ],
         ]);
     
-        if ($user->role === 'admin') {
-            return redirect()->route('dashboard')->with('message', 'Login berhasil sebagai admin');
-        }
-    
         return redirect()->route('dashboard')->with('message', 'Login berhasil');
     }
 
@@ -107,8 +103,10 @@ class UserController extends Controller
             'user' => [
                 'id'   => $user->id,
                 'name' => $user->name,
+                'role' => $user->role
             ],
         ]);
+    
 
         return redirect()->route('pengumuman')->with('message', 'Login berhasil');
     }
@@ -144,10 +142,6 @@ class UserController extends Controller
         $user = JWTAuth::setToken($token)->authenticate();
         if (!$user) {
             return redirect()->route('login.view')->withErrors(['error' => 'User tidak ditemukan']);
-        }
-
-        if ($user->role !== 'admin') {
-            return redirect()->route('home')->withErrors(['error' => 'Anda tidak memiliki akses ke halaman ini.']);
         }
 
     } catch (TokenInvalidException | TokenExpiredException | JWTException $e) {

@@ -17,8 +17,8 @@ Route::middleware('redirect.custom')->group(function () {
 
 // Logout tetap bisa
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
-    
-// Protected routes
+
+// Route setelah login
 Route::middleware('auth.custom')->group(function () {
     Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
     //Route::get('/pengumuman', [UserController::class, 'pengumuman'])->name('pengumuman');
@@ -29,9 +29,21 @@ Route::middleware('auth.custom')->group(function () {
     // get nya ganti resource 
     //Route::resource('pengumuman', PengumumanController::class);
     Route::get('/forum', [UserController::class, 'forum'])->name('forum');
-    Route::get('/bayar-iuran', [UserController::class, 'bayarIuran'])->name('bayar-iuran');
     Route::get('/kalender', [UserController::class, 'kalender'])->name('kalender');
+    
+    // Route Iuran
+    Route::get('/bayar-iuran', [IuranController::class, 'index'])->name('bayar-iuran'); 
+    Route::get('/bayar-iuran/cari', [IuranController::class, 'cari'])->name('iuran.cari'); 
+    Route::post('/bayar-iuran/{id}', [IuranController::class, 'bayar'])->name('iuran.bayar'); 
+
+    // Route jika kamu masih gunakan view statis untuk pembayaran
     Route::get('/pay', [UserController::class, 'pembayaran'])->name('pembayaran');
 });
 
+
+Route::middleware(['auth.custom', 'admin'])->group(function () {
+    Route::post('/pengumuman', [PengumumanController::class, 'store'])->name('pengumuman.store');
+    Route::put('/pengumuman/{id}', [PengumumanController::class, 'update'])->name('pengumuman.update');
+    Route::delete('/pengumuman/{id}', [PengumumanController::class, 'destroy'])->name('pengumuman.destroy');
+});
 
