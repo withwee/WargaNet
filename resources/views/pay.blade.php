@@ -8,134 +8,64 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/pay.css') }}">
 </head>
 
-<style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f8f9fa;
-        }
+<div class="header"></div>
 
-        .sidebar {
-            background-color: #2C79FF;
-            min-height: 100vh;
-            color: white;
-            padding: 20px;
-        }
+<!-- Search -->
+<form action="{{ route('iuran.cari') }}" method="GET">
+    <div class="input-group mb-3">
+        <input type="text" name="no_kk" class="form-control" placeholder="Masukkan Nomor Kartu Keluarga"
+            value="{{ request('no_kk') }}">
+        <button class="btn btn-primary"><i class="fas fa-search"></i> Cari</button>
+    </div>
+</form>
 
-        .sidebar .logo {
-            font-weight: 800;
-            font-size: 24px;
-            margin-bottom: 30px;
-        }
+<!-- Tabel Iuran -->
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title mb-3">Daftar Iuran</h5>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID Iuran</th>
+                    <th>Nama</th>
+                    <th>Jenis Iuran</th>
+                    <th>Total Bayar</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if(isset($iurans) && count($iurans) > 0)
+                    @foreach ($iurans as $iuran)
+                        <tr>
+                            <td>#{{ $iuran->id_bayar }}</td>
+                            <td>{{ $iuran->user->name ?? 'Tidak Ditemukan' }}</td>
+                            <td>{{ $iuran->jenis_iuran }}</td>
+                            <td>Rp {{ number_format($iuran->total_bayar, 0, ',', '.') }}</td>
+                            <td>
+                                @if ($iuran->status === 'Sudah Bayar')
+                                    <span class="status-paid">Sudah Bayar</span>
+                                @else
+                                    <form action="{{ route('iuran.bayar', $iuran->id_bayar) }}" method="POST">
+                                        @csrf
+                                        <button class="btn btn-primary">
+                                            <i class="fas fa-wallet me-1"></i> Bayar
+                                        </button>
+                                    </form>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="5" class="text-center">Silakan cari menggunakan nomor KK</td>
+                    </tr>
+                @endif
+            </tbody>
+        </table>
+    </div>
+</div>
 
-        .sidebar span {
-            font-weight: 400;
-        }
-
-        .nav-link {
-            color: white;
-        }
-
-        .nav-item.active {
-            background-color: white;
-            border-radius: 10px;
-        }
-
-        .nav-item.active .nav-link {
-            color: #2C79FF;
-            font-weight: bold;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .user-info img {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-        }
-
-        .status-paid {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: 500;
-        }
-
-        .btn-primary {
-            background-color: #2C79FF;
-            border-color: #2C79FF;
-        }
-
-        .btn-primary:hover {
-            background-color: #1b5dc1;
-        }
-
-    </style>
-<div class="header">
-                <h2>Bayar Iuran</h2>
-                <div class="user-info">
-                    Cipengs
-                    <img src="avatar.png" alt="User">
-                </div>
-            </div>
-
-            <!-- Search -->
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Masukkan Nomor Kartu Keluarga">
-                <button class="btn btn-primary"><i class="fas fa-search"></i> Cari</button>
-            </div>
-
-            <!-- Tabel Iuran -->
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title mb-3">Daftar Iuran</h5>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>ID Iuran</th>
-                                <th>Nama</th>
-                                <th>Jenis Iuran</th>
-                                <th>Total Bayar</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>#20462</td>
-                                <td>Cipengs</td>
-                                <td>Iuran Sampah</td>
-                                <td>Rp 125.000</td>
-                                <td><button class="btn btn-primary"><i class="fas fa-wallet me-1"></i> Bayar</button></td>
-                            </tr>
-                            <tr>
-                                <td>#20463</td>
-                                <td>Cipengs</td>
-                                <td>Iuran Keamanan</td>
-                                <td>Rp 25.000</td>
-                                <td><span class="status-paid">Sudah Bayar</span></td>
-                            </tr>
-                            <tr>
-                                <td>#20464</td>
-                                <td>Cipengs</td>
-                                <td>Iuran Acara 17 Agustus</td>
-                                <td>Rp 55.000</td>
-                                <td><span class="status-paid">Sudah Bayar</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
 @endsection

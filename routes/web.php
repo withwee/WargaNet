@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PengumumanController;
+use App\Http\Controllers\IuranController;
 use Illuminate\Support\Facades\Route;
 
 // Route publik (jika belum login)
@@ -20,10 +21,16 @@ Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 // Route setelah login
 Route::middleware('auth.custom')->group(function () {
     Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
-     Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('pengumuman');
+    Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('pengumuman');
     Route::get('/forum', [UserController::class, 'forum'])->name('forum');
-    Route::get('/bayar-iuran', [UserController::class, 'bayarIuran'])->name('bayar-iuran');
     Route::get('/kalender', [UserController::class, 'kalender'])->name('kalender');
+    
+    // Route Iuran
+    Route::get('/bayar-iuran', [IuranController::class, 'index'])->name('bayar-iuran'); 
+    Route::get('/bayar-iuran/cari', [IuranController::class, 'cari'])->name('iuran.cari'); 
+    Route::post('/bayar-iuran/{id}', [IuranController::class, 'bayar'])->name('iuran.bayar'); 
+
+    // Route jika kamu masih gunakan view statis untuk pembayaran
     Route::get('/pay', [UserController::class, 'pembayaran'])->name('pembayaran');
 });
 

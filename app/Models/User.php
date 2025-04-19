@@ -45,4 +45,10 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function iurans()
+{
+    return $this->hasMany(Iuran::class, 'no_kk', 'no_kk');
+}
+
 }
