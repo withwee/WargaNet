@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="space-y-6 p-4">
+<div class="space-y-6 ">
 
     <!-- Banner Pengumuman Khusus -->
     <div class="bg-blue-500 rounded-lg w-full relative flex justify-between items-center px-4 py-6">

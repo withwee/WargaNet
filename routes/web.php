@@ -1,10 +1,11 @@
 <?php
+
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\IuranController;
-use Illuminate\Support\Facades\Route;
 
-// Route publik (jika belum login)
+// Public routes hanya bisa diakses jika belum login
 Route::middleware('redirect.custom')->group(function () {
     Route::get('/', fn () => view('landing'))->name('home');
     Route::get('/register', fn () => view('register'))->name('register.view');
@@ -21,7 +22,9 @@ Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 // Route setelah login
 Route::middleware('auth.custom')->group(function () {
     Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
-    Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('pengumuman');
+        Route::resource('pengumuman', PengumumanController::class)->names([
+        'index' => 'pengumuman',
+    ]);
     Route::get('/forum', [UserController::class, 'forum'])->name('forum');
     Route::get('/kalender', [UserController::class, 'kalender'])->name('kalender');
     

@@ -51,12 +51,12 @@
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     background-color: #f8f9fa;
 }
 
 .sidebar {
-    background-color: #2C79FF;
+    background-color: #2c79ff;
     min-height: 100vh;
     color: white;
     padding: 20px;
@@ -82,7 +82,7 @@ body {
 }
 
 .nav-item.active .nav-link {
-    color: #2C79FF;
+    color: #2c79ff;
     font-weight: bold;
 }
 
@@ -114,8 +114,8 @@ body {
 }
 
 .btn-primary {
-    background-color: #2C79FF;
-    border-color: #2C79FF;
+    background-color: #2c79ff;
+    border-color: #2c79ff;
 }
 
 .btn-primary:hover {

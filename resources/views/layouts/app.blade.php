@@ -6,21 +6,21 @@
     <title>@yield('title', 'Dashboard - Warganet')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     @stack('styles')
 </head>
 <body>
-    <div class="flex">
+    <div class="flex font-[Poppins]">
         <x-sidebar/>
         <main class="w-full p-6 bg-sky-100 min-h-screen ml-64">
             <div class="flex justify-between items-center mb-6">
                 <div class="flex gap-2">
-                    <h1 class="font-bold text-3xl">
+                    <h1 class="!font-bold !text-xl">
                         {{ ucfirst(str_replace('-', ' ', Route::currentRouteName())) }}
                     </h1>
                 </div>
                 <div class="flex items-center gap-4">
-                    <h1>{{ $user->name ?? 'Guest' }}</h1>
+                    <h1 class="!font-bold !text-xl">{{ $user->name ?? 'Guest' }}</h1>
                     <img src="{{ asset('images/profile.png') }}" alt="profile" class="w-10 h-10 rounded-full">
                 </div>
             </div>
