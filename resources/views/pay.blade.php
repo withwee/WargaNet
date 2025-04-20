@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('page-title', 'Bayar Iuran')
 @section('content')
 
 <head>
