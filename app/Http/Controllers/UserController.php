@@ -90,7 +90,7 @@ class UserController extends Controller
 
         session()->forget('jwt_token');
 
-        return redirect()->route('login.view')->with('message', 'Logout berhasil');
+        return redirect()->route('home')->with('message', 'Logout berhasil');
     }
 
     // DASHBOARD
