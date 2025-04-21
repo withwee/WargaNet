@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Pengumuman;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -50,6 +51,7 @@ class UserController extends Controller
         return redirect()->route('login.view')->with('message', 'Registrasi berhasil. Silakan login.');
     }
 
+    // ADMIN LOGIN
     public function loginAdmin(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -87,13 +89,14 @@ class UserController extends Controller
             'user' => [
                 'id'   => $user->id,
                 'name' => $user->name,
-                'role' => $user->role
+                'role' => $user->role,
             ],
         ]);
 
         return redirect()->route('dashboard')->with('message', 'Login berhasil');
     }
 
+    // USER LOGIN
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -124,27 +127,24 @@ class UserController extends Controller
             return back()->withErrors(['error' => 'NIK atau Password salah'])->withInput();
         }
 
-        try {
-            $token = JWTAuth::fromUser($user);
-        } catch (JWTException $e) {
-            return back()->withErrors(['error' => 'Terjadi kesalahan saat membuat token'])->withInput();
-        }
+        $token = JWTAuth::fromUser($user);
 
         session([
             'jwt_token' => $token,
             'user' => [
                 'id'   => $user->id,
                 'name' => $user->name,
+                'role' => $user->role,
             ],
         ]);
 
         return redirect()->route('pengumuman')->with('message', 'Login berhasil');
     }
 
+    // LOGOUT
     public function logout()
     {
         $token = session('jwt_token');
-
         if ($token) {
             try {
                 JWTAuth::invalidate($token);
@@ -155,7 +155,7 @@ class UserController extends Controller
 
         session()->forget('jwt_token');
 
-        return redirect()->route('login.view')->with('message', 'Logout berhasil');
+        return redirect()->route('home')->with('message', 'Logout berhasil');
     }
 
     public function dashboard()
@@ -181,32 +181,55 @@ class UserController extends Controller
         return view('dashboard', compact('user'));
     }
 
+    // PENGUMUMAN (user & admin)
     public function pengumuman()
     {
-        return $this->withAuthView('pengumuman');
+        $user = $this->getAuthenticatedUserOrRedirect();
+        if (!$user instanceof User) return $user;
+
+        $pengumumans = Pengumuman::latest()->get();
+
+        if ($user->role === 'admin') {
+            return view('admin.pengumumanAdmin', compact('pengumumans'));
+        }
+
+        return view('pengumuman', compact('pengumumans'));
     }
 
     public function forum()
     {
-        return $this->withAuthView('forum');
+        $user = $this->getAuthenticatedUserOrRedirect();
+        if (!$user instanceof User) return $user;
+
+        return view('forum');
     }
 
     public function bayarIuran()
     {
-        return $this->withAuthView('pay');
+        $user = $this->getAuthenticatedUserOrRedirect();
+        if (!$user instanceof User) return $user;
+
+        return view('pay');
     }
 
     public function kalender()
     {
-        return $this->withAuthView('kalender');
+        $user = $this->getAuthenticatedUserOrRedirect();
+        if (!$user instanceof User) return $user;
+
+        return view('kalender');
     }
 
     public function pembayaran()
     {
-        return $this->withAuthView('pay');
+        $user = $this->getAuthenticatedUserOrRedirect();
+        if (!$user instanceof User) return $user;
+
+        return view('pay');
     }
 
-    private function withAuthView($view)
+    // 🔐 Ambil user dari JWT token di session
+    private function getAuthenticatedUserOrRedirect()
     {
         try {
             $token = JWTAuth::getToken() ?? session('jwt_token');
@@ -219,7 +242,8 @@ class UserController extends Controller
                 return redirect()->route('login.view')->withErrors(['error' => 'User tidak ditemukan']);
             }
 
-            return view($view);
+            return $user;
+
         } catch (TokenInvalidException | TokenExpiredException | JWTException $e) {
             return redirect()->route('login.view')->withErrors(['error' => 'Token tidak valid atau kedaluwarsa']);
         }
