@@ -9,6 +9,7 @@ class AdminSeeder extends Seeder
 {
     public function run()
     {
+        if (!User::where('email', 'admin@example.com')->exists()) {
         User::create([
             'name'     => 'SuperAdmin',
             'email'    => 'admin@example.com',
@@ -19,6 +20,6 @@ class AdminSeeder extends Seeder
             'jumlah_keluarga' => 1,
             'role'     => 'admin',
         ]);
-    }
+    }}
 }
 

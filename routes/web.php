@@ -28,10 +28,12 @@ Route::middleware('auth.custom')->group(function () {
     Route::get('/forum', [UserController::class, 'forum'])->name('forum');
     Route::get('/kalender', [UserController::class, 'kalender'])->name('kalender');
     
-    // Route Iuran
-    Route::get('/bayar-iuran', [IuranController::class, 'index'])->name('bayar-iuran'); 
-    Route::get('/bayar-iuran/cari', [IuranController::class, 'cari'])->name('iuran.cari'); 
-    Route::post('/bayar-iuran/{id}', [IuranController::class, 'bayar'])->name('iuran.bayar'); 
+     // Route Iuran
+     Route::get('/bayar-iuran', [IuranController::class, 'index'])->name('bayar-iuran'); 
+     Route::get('/iuran/create', [IuranController::class, 'create'])->name('iuran.create');
+     Route::get('/bayar-iuran/cari', [IuranController::class, 'cari'])->name('iuran.cari'); 
+     Route::post('/bayar-iuran/{id}', [IuranController::class, 'bayar'])->name('iuran.bayar'); 
+     Route::post('/iuran/store', [IuranController::class, 'store'])->name('iuran.store'); 
 
     // Route jika kamu masih gunakan view statis untuk pembayaran
     Route::get('/pay', [UserController::class, 'pembayaran'])->name('pembayaran');

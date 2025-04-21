@@ -10,14 +10,14 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::create([
-            'name'     => 'dummyUsers',
-            'email'    => 'dummy@gmail.com',
-            'password' => Hash::make('password123'),
-            'nik'      => '1234567890123457',
-            'no_kk'    => '1234567890123456',
+            'name'     => 'SuperAdmin',
+            'email'    => 'admin@example.com',
+            'password' => Hash::make('admin123'),
+            'nik'      => '1234567890123458', // Tambahkan nilai untuk nik
+            'no_kk'    => '1234567890123458',
             'phone'    => '08123456789',
             'jumlah_keluarga' => 1,
-            'role' => 'user'
+            'role'     => 'admin',
         ]);
     }
 }
