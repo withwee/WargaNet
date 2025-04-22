@@ -28,6 +28,7 @@ Route::middleware('auth.custom')->group(function () {
         Route::resource('pengumuman', PengumumanController::class)->names([
         'index' => 'pengumuman',
     ]);
+    Route::post('/pengumuman/{id}/toggle-khusus', [PengumumanController::class, 'toggleKhusus'])->name('pengumuman.toggleKhusus');
     Route::get('/forum', [UserController::class, 'forum'])->name('forum');
     Route::get('/kalender', [UserController::class, 'kalender'])->name('kalender');
     

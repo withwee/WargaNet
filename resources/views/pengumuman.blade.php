@@ -4,22 +4,24 @@
 <div class="space-y-8">
 
     <!-- Banner Pengumuman Khusus -->
+    @if ($pengumumanKhusus)
     <div class="bg-blue-500 rounded-2xl w-full relative flex justify-between items-center px-6 py-6">
         <div class="text-white space-y-3">
             <h1 class="font-bold text-2xl md:text-[22px] w-full md:w-[24rem] leading-snug">
-                Jadwal Pencalonan Ketua RT dan Sekretaris RT 2025
+                {{ $pengumumanKhusus->judulPengumuman }}
             </h1>
             <p class="w-full md:w-[90%] text-sm md:text-base">
-                Dimohon bagi warga yang berminat untuk mencalonkan diri sebagai Ketua dan Sekretaris RT bisa menghubungi Tuhan YME.
+                {{ $pengumumanKhusus->isiPengumuman }}
             </p>
             <div class="bg-white w-fit px-6 py-1.5 text-blue-500 text-sm md:text-base text-center rounded-3xl font-semibold">
-                3 Maret 2025
+                {{ $pengumumanKhusus->created_at->format('d M Y') }}
             </div>
         </div>
         <div class="w-38 absolute bottom-0 right-0">
             <img src="{{ asset('images/toa.png') }}" alt="toa">
         </div>
     </div>
+    @endif
 
     <!-- List Pengumuman -->
     <div class="space-y-4">
