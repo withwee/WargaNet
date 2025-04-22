@@ -17,7 +17,7 @@
                 {{ $pengumumanKhusus->created_at->format('d M Y') }}
             </div>
         </div>
-        <div class="w-38 absolute bottom-0 right-0">
+        <div class="w-48 absolute bottom-0 right-0">
             <img src="{{ asset('images/toa.png') }}" alt="toa">
         </div>
     </div>
