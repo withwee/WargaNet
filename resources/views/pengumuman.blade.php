@@ -1,19 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="space-y-8">
+<div class="space-y-6">
 
     <!-- Banner Pengumuman Khusus -->
     @if ($pengumumanKhusus)
     <div class="bg-blue-500 rounded-2xl w-full relative flex justify-between items-center px-6 py-6">
         <div class="text-white space-y-3">
-            <h1 class="font-bold text-2xl md:text-[22px] w-full md:w-[24rem] leading-snug">
+            <h1 class="font-bold text-2xl md:text-[22px] w-full md:w-[36rem] leading-snug">
                 {{ $pengumumanKhusus->judulPengumuman }}
             </h1>
             <p class="w-full md:w-[90%] text-sm md:text-base">
                 {{ $pengumumanKhusus->isiPengumuman }}
             </p>
-            <div class="bg-white w-fit px-6 py-1.5 text-blue-500 text-sm md:text-base text-center rounded-3xl font-semibold">
+            <div class="bg-white w-fit px-8 py-1.5 text-blue-500 text-sm md:text-base text-center rounded-3xl font-semibold">
                 {{ $pengumumanKhusus->created_at->format('d M Y') }}
             </div>
         </div>
