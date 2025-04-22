@@ -1,34 +1,40 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="space-y-6 ">
+<div class="space-y-8">
 
     <!-- Banner Pengumuman Khusus -->
-    <div class="bg-blue-500 rounded-lg w-full relative flex justify-between items-center px-4 py-6">
+    <div class="bg-blue-500 rounded-2xl w-full relative flex justify-between items-center px-6 py-6">
         <div class="text-white space-y-3">
-            <h1 class="font-bold text-2xl w-full md:w-[21rem]">Jadwal Pencalonan Ketua RT dan Sekretaris RT 2025</h1>
-            <p class="w-full md:w-[80%]">Dimohon bagi warga yang berminat untuk mencalonkan diri sebagai Ketua dan Sekretaris RT bisa menghubungi Tuhan YME.</p>
-            <div class="bg-white w-32 text-blue-500 text-center rounded-3xl p-2">
+            <h1 class="font-bold text-2xl md:text-[22px] w-full md:w-[24rem] leading-snug">
+                Jadwal Pencalonan Ketua RT dan Sekretaris RT 2025
+            </h1>
+            <p class="w-full md:w-[90%] text-sm md:text-base">
+                Dimohon bagi warga yang berminat untuk mencalonkan diri sebagai Ketua dan Sekretaris RT bisa menghubungi Tuhan YME.
+            </p>
+            <div class="bg-white w-fit px-6 py-1.5 text-blue-500 text-sm md:text-base text-center rounded-3xl font-semibold">
                 3 Maret 2025
             </div>
         </div>
-        <div class="w-32 absolute bottom-0 right-0">
+        <div class="w-38 absolute bottom-0 right-0">
             <img src="{{ asset('images/toa.png') }}" alt="toa">
         </div>
     </div>
 
     <!-- List Pengumuman -->
     <div class="space-y-4">
-        <h1 class="font-bold text-xl">Pengumuman Hari Ini</h1>
+        <h1 class="font-bold text-lg">Pengumuman Hari Ini</h1>
 
         @foreach ($pengumumans as $pengumuman)
-        <div class="bg-white p-4 rounded-lg space-y-3">
-        <h1 class="text-2xl font-bold">{{ $pengumuman->judulPengumuman }}</h1>
-        <p class="w-[80%] text-sm">{{ $pengumuman->isiPengumuman }}.</p>
-        <div class="bg-blue-500 p-2 rounded-3xl text-white text-sm font-bold w-fit">
-        {{ $pengumuman->created_at->format('d M Y, H:i') }}
+        <div class="bg-white p-5 rounded-2xl space-y-3 shadow-sm">
+            <h1 class="text-xl font-bold">{{ $pengumuman->judulPengumuman }}</h1>
+            <p class="text-sm leading-relaxed w-full md:w-[95%]">
+                {{ $pengumuman->isiPengumuman }}
+            </p>
+            <div class="bg-blue-500 px-6 py-1.5 rounded-3xl text-white text-sm font-semibold w-fit">
+                {{ $pengumuman->created_at->format('d M Y') }}
+            </div>
         </div>
-    </div>
         @endforeach
 
     </div>
