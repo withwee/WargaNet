@@ -60,7 +60,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
+            return back()->withErrors(['error' => 'Nama pengguna atau kata sandi salah.'])->withInput();
         }
 
         if (User::count() == 0) {
