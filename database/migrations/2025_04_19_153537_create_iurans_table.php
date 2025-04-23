@@ -15,12 +15,16 @@ return new class extends Migration
             $table->id('id_bayar');
             $table->string('jenis_iuran');
             $table->date('tgl_bayar')->nullable();
-            $table->integer('total_bayar');
-            $table->string('no_kk'); // foreign key ke tabel users
+            $table->unsignedInteger('total_bayar');
+            $table->string('no_kk');
             $table->enum('status', ['Belum Bayar', 'Sudah Bayar'])->default('Belum Bayar');
             $table->timestamps();
 
-            $table->foreign('no_kk')->references('no_kk')->on('users')->onDelete('cascade');
+            // Index + Foreign Key
+            $table->index('no_kk');
+            $table->foreign('no_kk')->references('no_kk')->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
@@ -32,4 +36,3 @@ return new class extends Migration
         Schema::dropIfExists('iurans');
     }
 };
-

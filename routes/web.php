@@ -2,14 +2,17 @@
 
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
+
 use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\IuranController;
 
 // Public routes hanya bisa diakses jika belum login
 Route::middleware('redirect.custom')->group(function () {
     Route::get('/', fn () => view('landing'))->name('home');
-    Route::get('/register', fn () => view('register'))->name('register.view');
-    Route::post('/register', [UserController::class, 'register'])->name('register');
+    Route::get('/register', [UserController::class, 'register'])->name('register.view');
+    Route::post('/register', [UserController::class, 'registerSubmit'])->name('register.submit');
     Route::get('/login', fn () => view('login'))->name('login.view');
     Route::post('/login', [UserController::class, 'login'])->name('login');
     Route::get('/admin', fn () => view('admin'))->name('admin.view');
@@ -25,6 +28,7 @@ Route::middleware('auth.custom')->group(function () {
         Route::resource('pengumuman', PengumumanController::class)->names([
         'index' => 'pengumuman',
     ]);
+    Route::post('/pengumuman/{id}/toggle-khusus', [PengumumanController::class, 'toggleKhusus'])->name('pengumuman.toggleKhusus');
     Route::get('/forum', [UserController::class, 'forum'])->name('forum');
     Route::get('/kalender', [UserController::class, 'kalender'])->name('kalender');
     
@@ -37,6 +41,8 @@ Route::middleware('auth.custom')->group(function () {
 
     // Route jika kamu masih gunakan view statis untuk pembayaran
     Route::get('/pay', [UserController::class, 'pembayaran'])->name('pembayaran');
+
+    
 });
 
 

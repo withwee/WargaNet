@@ -9,8 +9,13 @@ class IuranController extends Controller
 {
     public function index()
     {
-        return view('pay');
+        $iurans = [];
+        $user = null;
+        $no_kk = null;
+        
+        return view('pay', compact('iurans', 'user', 'no_kk'));
     }
+    
 
     public function cari(Request $request)
     {

@@ -3,6 +3,7 @@
 @section('title', 'Bayar Iuran')
 
 @section('content')
+<<<<<<< HEAD
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 </head>
+=======
+>>>>>>> 1f395b8a8a5c3acbdd2e9ebc4099f313426378a4
 <div class="space-y-6">
     <div class="header">
         <h1>Bayar Iuran</h1>

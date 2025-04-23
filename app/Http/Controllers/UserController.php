@@ -14,6 +14,43 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 
 class UserController extends Controller
 {
+    // Tampilkan form registrasi
+    public function register()
+    {
+        return view('register');
+    }
+
+    // Proses data registrasi
+    public function registerSubmit(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name'              => 'required|string|min:3',
+            'email'             => 'required|email|unique:users,email',
+            'password'          => 'required|string|min:8|confirmed',
+            'nik'               => 'required|digits:16|unique:users,nik',
+            'no_kk'             => 'required|digits:16',
+            'phone'             => 'required|string|min:10',
+            'jumlah_keluarga'   => 'required|integer|min:1',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        User::create([
+            'name'              => $request->name,
+            'email'             => $request->email,
+            'password'          => Hash::make($request->password),
+            'nik'               => $request->nik,
+            'no_kk'             => $request->no_kk,
+            'phone'             => $request->phone,
+            'jumlah_keluarga'   => $request->jumlah_keluarga,
+            'role'              => 'user',
+        ]);
+
+        return redirect()->route('login.view')->with('message', 'Registrasi berhasil. Silakan login.');
+    }
+
     // ADMIN LOGIN
     public function loginAdmin(Request $request)
     {
@@ -24,6 +61,19 @@ class UserController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
+        }
+
+        if (User::count() == 0) {
+            User::create([
+                'name'     => 'admin',
+                'email'    => 'admin@gmail.com',
+                'password' => Hash::make('password123'),
+                'nik'      => '1234567890123459',
+                'no_kk'    => '1234567890123459',
+                'phone'    => '08123456789',
+                'jumlah_keluarga' => 1,
+                'role' => 'admin'
+            ]);
         }
 
         $user = User::where('name', $request->name)->first();
@@ -58,6 +108,19 @@ class UserController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
+        if (User::count() == 0) {
+            User::create([
+                'name'     => 'dummyUsers',
+                'email'    => 'dummy@gmail.com',
+                'password' => Hash::make('password123'),
+                'nik'      => '1234567890123457',
+                'no_kk'    => '1234567890123456',
+                'phone'    => '08123456789',
+                'jumlah_keluarga' => 1,
+                'role' => 'user'
+            ]);
+        }
+
         $user = User::where('nik', $request->nik)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
@@ -85,19 +148,35 @@ class UserController extends Controller
         if ($token) {
             try {
                 JWTAuth::invalidate($token);
-            } catch (JWTException $e) {}
+            } catch (JWTException $e) {
+                // abaikan jika token invalid
+            }
         }
 
         session()->forget('jwt_token');
 
-        return redirect()->route('login.view')->with('message', 'Logout berhasil');
+        return redirect()->route('home')->with('message', 'Logout berhasil');
     }
 
-    // DASHBOARD
     public function dashboard()
     {
-        $user = $this->getAuthenticatedUserOrRedirect();
-        if (!$user instanceof User) return $user;
+        try {
+            $token = session('jwt_token');
+            if (!$token) {
+                return redirect()->route('login.view')->withErrors(['error' => 'Token tidak tersedia']);
+            }
+
+            $user = JWTAuth::setToken($token)->authenticate();
+            if (!$user) {
+                return redirect()->route('login.view')->withErrors(['error' => 'User tidak ditemukan']);
+            }
+
+            if ($user->role !== 'admin') {
+                return redirect()->route('home')->withErrors(['error' => 'Anda tidak memiliki akses ke halaman ini.']);
+            }
+        } catch (TokenInvalidException | TokenExpiredException | JWTException $e) {
+            return redirect()->route('login.view')->withErrors(['error' => 'Token tidak valid atau kedaluwarsa']);
+        }
 
         return view('dashboard', compact('user'));
     }
