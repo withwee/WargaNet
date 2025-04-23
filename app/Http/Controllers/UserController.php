@@ -102,6 +102,11 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'nik'      => 'required|digits:16',
             'password' => 'required|string|min:8',
+        ], [
+            'nik.required'  => 'NIK wajib diisi.',
+            'nik.digits'    => 'NIK harus terdiri dari 16 digit.',
+            'password.required' => 'Password wajib diisi.',
+            'password.min'       => 'Password minimal 8 karakter.',
         ]);
 
         if ($validator->fails()) {
