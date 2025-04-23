@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="max-w-screen space-y-8">
+<div class="max-w-screen space-y-6">
 
     {{-- Buat Pengumuman --}}
     <h2 class="text-2xl font-bold text-gray-800">Buat Pengumuman</h2>
@@ -44,7 +44,7 @@
     @endif
 
     @forelse($pengumumans as $p)
-        <div class="bg-white p-6 rounded-xl shadow space-y-4">
+        <div class="bg-white p-6 rounded-xl shadow space-y-2">
             <h2 class="text-lg font-bold text-gray-900">
                 {{ $p->judulPengumuman }}
                 @if($p->pengumuman_khusus)
