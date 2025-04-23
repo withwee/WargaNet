@@ -37,47 +37,49 @@
     {{-- Daftar Pengumuman --}}
     <h1 class="text-2xl font-bold mb-2">Daftar Pengumuman</h1>
 
-        @if(session('success'))
-            <div class="bg-green-100 text-green-800 px-4 py-2 rounded mb-4">
-                {{ session('success') }}
-            </div>
-        @endif
+    @if(session('success'))
+        <div class="bg-green-100 text-green-800 px-4 py-2 rounded mb-4">
+            {{ session('success') }}
+        </div>
+    @endif
 
-        @forelse($pengumumans as $p)
-            <div class="bg-white p-6 rounded-xl shadow space-y-4">
-                <h2 class="text-lg font-bold text-gray-900">{{ $p->judulPengumuman }}</h2>
+    @forelse($pengumumans as $p)
+        <div class="bg-white p-6 rounded-xl shadow space-y-4">
+            <h2 class="text-lg font-bold text-gray-900">
+                {{ $p->judulPengumuman }}
                 @if($p->pengumuman_khusus)
-                    <span class="ml-2 px-2 py-1 bg-yellow-400 text-white rounded-full text-xs">KHUSUS</span>
+                    <span class="ml-2 px-5 py-1 bg-yellow-400 text-white rounded-full text-xs align-middle">KHUSUS</span>
                 @endif
-                <p class="text-gray-700 mt-1">{{ $p->isiPengumuman }}</p>
+            </h2>
+            <p class="text-gray-700 mt-1">{{ $p->isiPengumuman }}</p>
 
-                <div class="flex items-center justify-between mt-4">
-                    <span class="bg-blue-600 text-white font-reguler px-12 py-1 text-sm rounded-full shadow border border-blue-200">
-                        {{ $p->created_at->format('d M Y') }}
-                    </span>
-                    <div class="space-x-2">
-                        {{-- Tombol Hapus --}}
-                        <form action="{{ route('pengumuman.destroy', $p->id) }}" method="POST" class="inline-block"
-                              onsubmit="return confirm('Yakin ingin menghapus pengumuman ini?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"
-                                    class="bg-red-500 hover:bg-red-600 text-white font-reguler px-9 py-1.5 rounded-full text-sm">Hapus</button>
-                        </form>
-                        {{-- Tombol Khusus --}}
-                        <form action="{{ route('pengumuman.toggleKhusus', $p->id) }}" method="POST" class="inline-block">
-                            @csrf
-                            <button type="submit"
-                                    class="bg-purple-500 hover:bg-purple-600 text-white font-reguler px-6 py-1.5 rounded-full text-sm">
-                                {{ $p->pengumuman_khusus ? 'Ubah ke Biasa' : 'Jadikan Khusus' }}
-                            </button>
-                        </form>
-                    </div>
+            <div class="flex items-center justify-between mt-4">
+                <span class="bg-blue-600 text-white font-reguler px-12 py-1 text-sm rounded-full shadow border border-blue-200">
+                    {{ $p->created_at->format('d M Y') }}
+                </span>
+                <div class="space-x-2">
+                    {{-- Tombol Hapus --}}
+                    <form action="{{ route('pengumuman.destroy', $p->id) }}" method="POST" class="inline-block"
+                          onsubmit="return confirm('Yakin ingin menghapus pengumuman ini?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                                class="bg-red-500 hover:bg-red-600 text-white font-reguler px-9 py-1.5 rounded-full text-sm">Hapus</button>
+                    </form>
+                    {{-- Tombol Khusus --}}
+                    <form action="{{ route('pengumuman.toggleKhusus', $p->id) }}" method="POST" class="inline-block">
+                        @csrf
+                        <button type="submit"
+                                class="bg-purple-500 hover:bg-purple-600 text-white font-reguler px-6 py-1.5 rounded-full text-sm">
+                            {{ $p->pengumuman_khusus ? 'Ubah ke Biasa' : 'Jadikan Khusus' }}
+                        </button>
+                    </form>
                 </div>
             </div>
-        @empty
-            <p class="text-gray-600">Belum ada pengumuman.</p>
-        @endforelse
+        </div>
+    @empty
+        <p class="text-gray-600">Belum ada pengumuman.</p>
+    @endforelse
 </div>
 
 <script>
