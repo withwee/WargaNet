@@ -7,7 +7,7 @@
 <div class="flex flex-col w-full mt-8 space-y-6">
     <form action="{{ route('login') }}" method="POST" class="space-y-4 w-full" onsubmit="return validateForm();">
         @csrf
-    
+
         <!-- Input NIK -->
         <div class="relative">
             <input 
@@ -17,10 +17,9 @@
                 placeholder="Masukkan NIK Anda" 
                 value="{{ old('nik') }}" 
                 class="border border-gray-300 p-3 pl-12 rounded-lg bg-gray-100 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
                 required 
-                oninvalid="this.setCustomValidity('Harap Isi Kolom NIK Terlebih Dahulu')" 
-                oninput="this.setCustomValidity('')" 
+                oninvalid="this.setCustomValidity('Harap isi NIK Anda terlebih dahulu')" 
+                oninput="this.setCustomValidity('')"
             >
             <div class="absolute left-4 top-1/2 -translate-y-1/2">
                 <img src="{{ asset('icon/ktp.svg') }}" alt="icon" class="w-5 h-5 text-gray-400">
@@ -38,9 +37,9 @@
                 id="password" 
                 placeholder="Masukkan Kata Sandi" 
                 class="border border-gray-300 p-3 pl-12 pr-12 rounded-lg bg-gray-100 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                oninvalid="this.setCustomValidity('Harap Isi Kolom Terlebih Dahulu')" 
-                oninput="this.setCustomValidity('')" 
                 required
+                oninvalid="this.setCustomValidity('Harap isi Kata Sandi Anda terlebih dahulu')" 
+                oninput="this.setCustomValidity('')" 
             >
             <div class="absolute left-4 top-1/2 -translate-y-1/2">
                 <img src="{{ asset('icon/lock.svg') }}" alt="icon" class="w-5 h-5 text-gray-400">
@@ -72,6 +71,9 @@
     </div>
 </div>
 
+<!-- CDN SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <!-- JS: Toggle Password + Validasi Form Kosong -->
 <script>
     function togglePassword() {
@@ -87,23 +89,34 @@
     }
 
     function validateForm() {
-    console.log('Fungsi validateForm dijalankan');
-    const nik = document.getElementById('nik').value.trim();
-    const password = document.getElementById('password').value.trim();
+        const nik = document.getElementById('nik').value.trim();
+        const password = document.getElementById('password').value.trim();
 
-    if (!nik && !password) {
-        alert("Harap isi NIK dan Kata Sandi Anda terlebih dahulu.");
-        return false;
-    } else if (!nik) {
-        alert("Harap isi NIK Anda.");
-        return false;
-    } else if (!password) {
-        alert("Harap isi Kata Sandi Anda.");
-        return false;
+        if (!nik && !password) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Data Kosong',
+                text: 'Harap isi NIK dan Kata Sandi Anda terlebih dahulu.',
+            });
+            return false;
+        } else if (!nik) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'NIK Kosong',
+                text: 'Harap isi NIK Anda sebelum melanjutkan.',
+            });
+            return false;
+        } else if (!password) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Kata Sandi Kosong',
+                text: 'Harap isi Kata Sandi Anda sebelum melanjutkan.',
+            });
+            return false;
+        }
+
+        return true;
     }
-    return true;
-}
-
 </script>
 
 @endsection
