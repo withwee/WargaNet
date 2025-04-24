@@ -12,7 +12,10 @@
 <body>
 <main class="h-screen w-full flex items-center justify-end"
       style="background-image: linear-gradient(rgba(44, 121, 255, 0.35), rgba(44, 121, 255, 0.35)), url('{{ asset('images/Background.png') }}'); background-size: cover; background-repeat: no-repeat; background-position: center;">
-
+      <a href="/"
+   class="border py-2 px-3 text-center  z-50 font-bold rounded-md text-2xl bg-white absolute top-3 left-3 text-blue-500  transitiont">
+   <iconify-icon icon="mdi:arrow-left" ></iconify-icon>
+</a>
     <div class="w-full h-screen relative flex items-center justify-end">
         <!-- Tombol hanya "Masuk" -->
         <div class="flex flex-col relative items-center gap-4">
