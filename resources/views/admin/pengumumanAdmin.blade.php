@@ -10,13 +10,13 @@
             @csrf
             <div>
                 <label class="block text-base font-semibold mb-1 text-gray-700">Judul Pengumuman</label>
-                <input type="text" name="judulPengumuman" id="judulPengumuman"
+                <input type="text" name="judulPengumuman" id="judulPengumuman" minlength="5"
                        placeholder="Ketik judul pengumuman yang mau dibuat di sini ..."
                        class="w-full border border-gray-300 rounded-full px-5 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800" required>
             </div>
             <div>
                 <label class="block text-base font-semibold mb-1 text-gray-700">Isi Pengumuman</label>
-                <textarea name="isiPengumuman" id="isiPengumuman"
+                <textarea name="isiPengumuman" id="isiPengumuman" minlength="10"
                           placeholder="Ketik isi pengumuman yang mau dibuat di sini ..."
                           class="w-full border border-gray-300 rounded-2xl px-5 py-3 h-40 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800" required></textarea>
             </div>
@@ -88,12 +88,13 @@
     const submitBtn = document.getElementById('btnPublikasi');
 
     function toggleButton() {
-        const judulNotEmpty = judulInput.value.trim() !== '';
-        const isiNotEmpty = isiInput.value.trim() !== '';
-        submitBtn.disabled = !(judulNotEmpty && isiNotEmpty);
+        const judulValid = judulInput.value.trim().length >= 3;
+        const isiValid = isiInput.value.trim().length >= 10;
+
+        submitBtn.disabled = !(judulValid && isiValid);
 
         if (submitBtn.disabled) {
-            submitBtn.classList.remove('bg-blue-600', 'cursor-pointer');
+            submitBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'cursor-pointer');
             submitBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
         } else {
             submitBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
