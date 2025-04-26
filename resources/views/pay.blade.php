@@ -3,58 +3,55 @@
 @section('title', 'Bayar Iuran')
 
 @section('content')
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pembayaran Iuran</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-</head>
-<div class="space-y-6">
-    <div class="header">
-        <h1>Bayar Iuran</h1>
-    </div>
 
-    <div class="container mt-5">
-    <div class="row">
-        <!-- Tabel Daftar Iuran -->
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Daftar Iuran</h5>
-                    <!-- Search -->
-                    <form action="{{ route('iuran.cari') }}" method="GET" class="mb-3">
-                        <div class="input-group">
-                            <input type="text" name="no_kk" class="form-control" placeholder="Masukkan Nomor Kartu Keluarga"
-                                value="{{ request('no_kk') }}">
-                            <button class="btn btn-primary"><i class="fas fa-search"></i> Cari</button>
-                        </div>
-                    </form>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>ID Iuran</th>
-                                <th>Nama</th>
-                                <th>Jenis Iuran</th>
-                                <th>Total Bayar</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        @if(isset($iurans) && count($iurans) > 0)
-                            @foreach ($iurans as $iuran)
-                                <tr>
-                                    <td>#{{ $iuran->id_bayar }}</td>
-                                    <td>{{ $iuran->user->name ?? 'Tidak Ditemukan' }}</td>
-                                    <td>{{ $iuran->jenis_iuran }}</td>
-                                    <td>Rp {{ number_format($iuran->total_bayar, 0, ',', '.') }}</td>
-                                    <td class="text-center">
-                                    @if ($iuran->status === 'Sudah Bayar')
-                                        <span class="badge bg-success">Sudah Bayar</span>
-                                    @else
-                                        <!-- Tombol Bayar -->
-                                    <button id="pay-button-{{ $iuran->id_bayar }}" class="btn btn-primary btn-sm">
+<div class="max-w-screen space-y-6">
+
+    {{-- Flash Message --}}
+    @if(session('success'))
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+            <strong class="font-bold">Sukses!</strong>
+            <span class="block sm:inline">{{ session('success') }}</span>
+        </div>
+    @endif
+
+    {{-- Bayar Iuran --}}
+    <h2 class="text-2xl font-bold text-gray-800">Bayar Iuran</h2>
+
+    <div class="bg-white p-6 rounded-xl shadow space-y-6">
+        <!-- Search -->
+        <form action="{{ route('iuran.cari') }}" method="GET" class="mb-6">
+            <div class="flex items-center gap-2">
+                <input type="text" name="no_kk" class="w-full border border-gray-300 rounded-full px-5 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800" placeholder="Masukkan Nomor Kartu Keluarga" value="{{ request('no_kk') }}">
+                <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full px-6 py-3"><i class="fas fa-search"></i> Cari</button>
+            </div>
+        </form>
+
+        <div class="overflow-x-auto">
+            <table class="w-full border-collapse border border-gray-300">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="border border-gray-300 px-4 py-2">ID Iuran</th>
+                        <th class="border border-gray-300 px-4 py-2">Nama</th>
+                        <th class="border border-gray-300 px-4 py-2">Jenis Iuran</th>
+                        <th class="border border-gray-300 px-4 py-2">Total Bayar</th>
+                        <th class="border border-gray-300 px-4 py-2">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @if(isset($iurans) && count($iurans) > 0)
+                    @foreach ($iurans as $iuran)
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">#{{ $iuran->id_bayar }}</td>
+                            <td class="border border-gray-300 px-4 py-2">{{ $iuran->user->name ?? 'Tidak Ditemukan' }}</td>
+                            <td class="border border-gray-300 px-4 py-2">{{ $iuran->jenis_iuran }}</td>
+                            <td class="border border-gray-300 px-4 py-2">Rp {{ number_format($iuran->total_bayar, 0, ',', '.') }}</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">
+                                @if ($iuran->status === 'Sudah Bayar')
+                                    <span class="bg-green-100 text-green-800 text-sm font-semibold px-4 py-2 rounded-full">
+                                        Sudah Bayar
+                                    </span>
+                                @else
+                                    <button id="pay-button-{{ $iuran->id_bayar }}" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm px-10 py-2 rounded-full transition">
                                         <i class="fas fa-wallet"></i> Bayar
                                     </button>
                                     <script>
@@ -88,51 +85,42 @@
                                                 });
                                         });
                                     </script>
-                                    @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @else
-                            <tr>
-                                <td colspan="5" class="text-center">Silahkan cari menggunakan nomor KK</td>
-                            </tr>
-                        @endif
-                    </tbody>
-                    </table>
-                </div>
-            </div>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="5" class="border border-gray-300 text-center px-4 py-4">Silahkan cari menggunakan nomor KK</td>
+                    </tr>
+                @endif
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <div class="row mt-4">
-    <!-- Tabel Tambah Data Iuran -->
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Tambah Data Iuran</h5>
-                <form action="{{ route('iuran.store') }}" method="POST">
-                    @csrf
-                    <table class="table table-borderless">
-                        <tbody>
-                            <tr>
-                                <td><label for="jenis_iuran" class="form-label">Jenis Iuran</label></td>
-                                <td><input type="text" name="jenis_iuran" class="form-control" id="jenis_iuran" required></td>
-                            </tr>
-                            <tr>
-                                <td><label for="total_bayar" class="form-label">Total Bayar</label></td>
-                                <td><input type="number" name="total_bayar" class="form-control" id="total_bayar" required></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" class="text-end">
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </form>
+    {{-- Buat Iuran --}}
+    <h2 class="text-2xl font-bold text-gray-800">Buat Iuran</h2>
+
+    <div class="bg-white p-6 rounded-xl shadow space-y-6">
+        <form action="{{ route('iuran.store') }}" method="POST" class="space-y-4">
+            @csrf
+            <div>
+                <label for="jenis_iuran" class="block text-base font-semibold mb-1 text-gray-700">Jenis Iuran</label>
+                <input type="text" name="jenis_iuran" id="jenis_iuran" class="w-full border border-gray-300 rounded-full px-5 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800" required>
             </div>
-        </div>
+            <div>
+                <label for="total_bayar" class="block text-base font-semibold mb-1 text-gray-700">Total Bayar</label>
+                <input type="number" name="total_bayar" id="total_bayar" class="w-full border border-gray-300 rounded-full px-5 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800" required>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-32 py-3 rounded-full transition duration-300">
+                    Publikasikan Iuran
+                </button>
+            </div>
+        </form>
     </div>
+
 </div>
 
 @endsection
