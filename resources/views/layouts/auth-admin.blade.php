@@ -59,6 +59,7 @@
   <div class="bg-white h-screen items-center justify-center flex flex-col w-full">
     <div class="w-96">
       <!-- Logo Aplikasi -->
+     <h1 class="text-blue-500 text-center font-bold text-2xl">Admin</h1>
       <div class="flex items-center justify-center gap-0.5 text-5xl text-[#2C79FF]">
         <h1 class="font-extrabold">Warga</h1>
         <h1>Net</h1>
