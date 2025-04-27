@@ -228,6 +228,49 @@ class UserController extends Controller
         return view('pay');
     }
 
+    // Tampilkan form edit profil
+    public function editProfile()
+    {
+        $user = $this->getAuthenticatedUserOrRedirect();
+        if (!$user instanceof User) return $user;
+
+        return view('edit-profile', compact('user'));
+    }
+
+    // Proses update profil
+    public function updateProfile(Request $request)
+    {
+        $user = $this->getAuthenticatedUserOrRedirect();
+        if (!$user instanceof User) return $user;
+
+        $validator = Validator::make($request->all(), [
+            'name'              => 'required|string|min:3',
+            'email'             => 'required|email|unique:users,email,' . $user->id,
+            'nik'               => 'required|digits:16|unique:users,nik,' . $user->id,
+            'no_kk'             => 'required|digits:16',
+            'phone'             => 'required|string|min:10',
+            'jumlah_keluarga'   => 'required|integer|min:1',
+            'password'          => 'nullable|string|min:8|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $user->update([
+            'name'              => $request->name,
+            'email'             => $request->email,
+            'nik'               => $request->nik,
+            'no_kk'             => $request->no_kk,
+            'phone'             => $request->phone,
+            'jumlah_keluarga'   => $request->jumlah_keluarga,
+            'password'          => $request->password ? Hash::make($request->password) : $user->password,
+        ]);
+
+        return redirect()->route('profile.edit')->with('message', 'Profil berhasil diperbarui.');
+    }
+
+
     // 🔐 Ambil user dari JWT token di session
     private function getAuthenticatedUserOrRedirect()
     {
