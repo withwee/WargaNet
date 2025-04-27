@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>@yield('title', 'Authentication')</title>
+  <title>@yield('title', 'Login Admin')</title>
 
   <!-- Import CSS dan JS menggunakan Vite -->
   @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -28,38 +28,26 @@
       ">
 
   <!-- Tombol Kembali ke Landing Page -->
-  <a href="/" class="flex items-center gap-1 border py-2 px-4 text-center z-50 font-bold rounded-full text-lg bg-white absolute top-5 left-5 text-blue-500 shadow-md hover:bg-blue-50 transition-all duration-300">
-    <iconify-icon icon="mdi:arrow-left" width="36" height="24"></iconify-icon>
+  <a href="/" class="flex items-center gap-2 border py-2 px-4 text-center z-50 font-bold rounded-full text-lg bg-white absolute top-5 left-5 text-blue-500 shadow-md hover:bg-blue-50 transition-all duration-300">
+    <iconify-icon icon="mdi:arrow-left" width="24" height="24"></iconify-icon>
     <span>Kembali</span>
   </a>
 
-  <!-- Area sebelah kanan untuk pilihan Login/Daftar -->
+  <!-- Area sebelah kanan untuk Login -->
   <div class="w-full h-screen relative flex items-center justify-end">
 
-  <div class="flex flex-col relative items-center gap-6">
-    
-  <!-- Tombol Masuk -->
-  <a href="/login" class="w-56">
-    @if (Request::is('login'))
-    <button class="w-full py-4 text-2xl font-bold bg-white text-blue-500 rounded-l-full rounded-r-3xl transition-all duration-300">
-        Masuk
-      </button>
-    @else
-      <span class="block text-2xl font-bold text-white text-center">Masuk</span>
-    @endif
-  </a>
-
-  <!-- Tombol Daftar -->
-  <a href="/register" class="w-56">
-    @if (Request::is('register'))
-    <button class="w-full py-4 text-2xl font-bold bg-white text-blue-500 rounded-l-full rounded-r-3xl transition-all duration-300">
-        Daftar
-      </button>
-    @else
-      <span class="block text-2xl font-bold text-white text-center">Daftar</span>
-    @endif
-  </a>
-</div>
+    <!-- Tombol "Masuk" -->
+    <div class="flex flex-col relative items-center gap-4">
+      <a href="{{ route('admin') }}">
+        @if (Request::is('admin'))
+        <button class="w-36 py-4 text-2xl font-bold bg-white text-blue-500 rounded-l-full rounded-r-3xl transition-all duration-300">
+            Masuk
+          </button>
+        @else
+          <span class="font-bold text-black">Masuk</span>
+        @endif
+      </a>
+    </div>
 
     <!-- Copyright Center -->
     <p class="absolute font-medium text-2xl md:text-[22px] bottom-10 left-1/2 transform -translate-x-1/2 text-white">
@@ -67,20 +55,19 @@
     </p>
   </div>
 
-  <!-- Area Form Login / Register -->
+  <!-- Area Login Form -->
   <div class="bg-white h-screen items-center justify-center flex flex-col w-full">
-
     <div class="w-96">
       <!-- Logo Aplikasi -->
+     <h1 class="text-blue-500 text-center font-bold text-2xl">Admin</h1>
       <div class="flex items-center justify-center gap-0.5 text-5xl text-[#2C79FF]">
         <h1 class="font-extrabold">Warga</h1>
         <h1>Net</h1>
       </div>
 
-      <!-- Slot untuk konten Login/Register -->
+      <!-- Slot untuk konten Login (Form, dll) -->
       @yield('content')
     </div>
-
   </div>
 
 </main>

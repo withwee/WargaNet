@@ -1,90 +1,116 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script src="{{ asset('js/app.js') }}" defer></script>
-    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-</head>
-<body>
-    <main class="h-screen w-full flex  items-center justify-end"
-    style="background-image: linear-gradient(rgba(44, 121, 255, 0.35), rgba(44, 121, 255, 0.35)), url('images/Background.png'); background-size: cover; background-repeat: no-repeat; background-position: center;">
-    <div class="w-full h-screen  relative flex items-center justify-end">
-    <div class="flex flex-col relative items-center gap-4">
-    <a href="/admin">
-            <button class="border w-40 py-3 font-bold bg-white text-blue-500 rounded-bl-3xl rounded-tl-3xl transition">
-                Masuk
-            </button>
-    </a>
-</div>
+@extends('layouts.auth-admin')
 
-        <p class="absolute bottom-10 right-56 text-white">Copyright ©{{ date('Y') }} WargaNet</p>
-    </div>
+@section('title', 'Login Admin')
 
-    <div class="bg-white h-screen items-center justify-center flex flex-col w-full">
+@section('content')
 
-    <div class="w-96">
-        <div class="flex flex-col justify-center items-center gap-2">
-
-            <h1 class="text-[#2C79FF] font-extrabold text-xl">Admin</h1>
-            <div class="flex items-center justify-center gap-0.5 text-5xl text-[#2C79FF]">
-            <h1 class="font-extrabold">Warga</h1>
-            <h1>Net</h1>
-        </div>
-        </div>
-
-    <div class="flex flex-col w-full mt-4">
-    <form action="{{ route('admin') }}" method="POST" class="space-y-4 w-full ">
+<div class="flex flex-col w-full mt-8 space-y-6">
+    <form action="{{ route('admin') }}" method="POST" class="space-y-4 w-full" onsubmit="return validateAdminForm();">
         @csrf
-    
+
+        <!-- Input Username -->
         <div class="relative">
-    <input type="text" name="name" placeholder="Username" value="{{ old('name') }}" required class="border p-2 pl-10 bg-gray-200 w-full">
-    <div class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-        <img src="icon/ktp.svg" alt="icon">
-    </div>
-</div>  
-@error('name')
-    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-@enderror
+            <input 
+                type="text" 
+                name="name" 
+                id="name"
+                placeholder="Masukkan Username" 
+                value="{{ old('name') }}" 
+                class="border border-gray-300 p-3 pl-12 rounded-lg bg-gray-100 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required 
+                oninvalid="this.setCustomValidity('Harap isi Username Anda terlebih dahulu')" 
+                oninput="this.setCustomValidity('')"
+            >
+            <div class="absolute left-4 top-1/2 -translate-y-1/2">
+                <img src="{{ asset('icon/user.svg') }}" alt="icon" class="w-5 h-5 text-gray-400">
+            </div>
+        </div>  
+        @error('name')
+            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+        @enderror
 
-<div class="relative">
-    <input type="password" name="password" id="password" placeholder="Password" required class="border p-2 pl-10 pr-10 bg-gray-200 w-full">
-    <div class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-        <img src="icon/lock.svg" alt="icon">
-    </div>
-    <button type="button" onclick="togglePassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 focus:outline-none">
-        <iconify-icon id="eyeIcon" icon="mdi:eye-outline" width="20" height="20" class="text-black"></iconify-icon>
-    </button>
-</div>
-@error('password')
-    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-@enderror
+        <!-- Input Password -->
+        <div class="relative">
+            <input 
+                type="password" 
+                name="password" 
+                id="password" 
+                placeholder="Masukkan Kata Sandi" 
+                class="border border-gray-300 p-3 pl-12 pr-12 rounded-lg bg-gray-100 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+                oninvalid="this.setCustomValidity('Harap isi Kata Sandi Anda terlebih dahulu')" 
+                oninput="this.setCustomValidity('')" 
+            >
+            <div class="absolute left-4 top-1/2 -translate-y-1/2">
+                <img src="{{ asset('icon/lock.svg') }}" alt="icon" class="w-5 h-5 text-gray-400">
+            </div>
+            <button type="button" onclick="togglePassword()" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 focus:outline-none">
+                <iconify-icon id="eyeIcon" icon="mdi:eye-outline" width="20" height="20" class="text-black"></iconify-icon>
+            </button>
+        </div>
+        @error('password')
+            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+        @enderror
 
-@if ($errors->has('error'))
-    <p class="text-red-500 text-sm mt-2">{{ $errors->first('error') }}</p>
-@endif
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 w-full">Login</button>
+        @if ($errors->has('error'))
+            <p class="text-red-500 text-sm mt-2">{{ $errors->first('error') }}</p>
+        @endif
+
+        <!-- Tombol Login -->
+        <button 
+            type="submit" 
+            class="bg-blue-600 hover:bg-blue-700 transition-colors text-white font-semibold px-4 py-3 rounded-lg w-full">
+            Masuk Sebagai Admin
+        </button>
     </form>
-
-</div>
 </div>
 
-</div>
-</main>
+<!-- CDN SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- JS: Toggle Password + Validasi Form Kosong -->
 <script>
-        function togglePassword() {
-            const passwordField = document.getElementById('password');
-            const eyeIcon = document.getElementById('eyeIcon');
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                eyeIcon.setAttribute('icon', 'mdi:eye-off-outline');
-            } else {
-                passwordField.type = 'password';
-                eyeIcon.setAttribute('icon', 'mdi:eye-outline');
-            }
+    function togglePassword() {
+        const passwordInput = document.getElementById('password');
+        const eyeIcon = document.getElementById('eyeIcon');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            eyeIcon.setAttribute('icon', 'mdi:eye-off-outline');
+        } else {
+            passwordInput.type = 'password';
+            eyeIcon.setAttribute('icon', 'mdi:eye-outline');
         }
-    </script>
-</body>
-</html>
+    }
+
+    function validateAdminForm() {
+        const name = document.getElementById('name').value.trim();
+        const password = document.getElementById('password').value.trim();
+
+        if (!name && !password) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Data Kosong',
+                text: 'Harap isi Username dan Kata Sandi Anda terlebih dahulu.',
+            });
+            return false;
+        } else if (!name) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Username Kosong',
+                text: 'Harap isi Username Anda sebelum melanjutkan.',
+            });
+            return false;
+        } else if (!password) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Kata Sandi Kosong',
+                text: 'Harap isi Kata Sandi Anda sebelum melanjutkan.',
+            });
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+@endsection
