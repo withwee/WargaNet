@@ -30,7 +30,9 @@ class UserController extends Controller
             'nik'               => 'required|digits:16|unique:users,nik',
             'no_kk'             => 'required|digits:16',
             'phone'             => 'required|string|min:10',
-            'jumlah_keluarga'   => 'required|integer|min:1',
+            'jumlah_LK'         => 'required|integer|min:0',
+            'jumlah_PR'         => 'required|integer|min:0',
+            'photo'             => 'nullable|image|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -44,8 +46,9 @@ class UserController extends Controller
             'nik'               => $request->nik,
             'no_kk'             => $request->no_kk,
             'phone'             => $request->phone,
-            'jumlah_keluarga'   => $request->jumlah_keluarga,
             'role'              => 'user',
+            'jumlah_LK'         => $request->jumlah_LK,
+            'jumlah_PR'         => $request->jumlah_PR,
         ]);
 
         return redirect()->route('login.view')->with('message', 'Registrasi berhasil. Silakan login.');
@@ -121,7 +124,9 @@ class UserController extends Controller
                 'nik'      => '1234567890123457',
                 'no_kk'    => '1234567890123456',
                 'phone'    => '08123456789',
-                'jumlah_keluarga' => 1,
+                'photo'    => null,
+                'jumlah_LK' => 1,
+                'jumlah_PR' => 0,
                 'role' => 'user'
             ]);
         }
@@ -234,46 +239,46 @@ class UserController extends Controller
     }
 
     // Tampilkan form edit profil
-    public function editProfile()
-    {
-        $user = $this->getAuthenticatedUserOrRedirect();
-        if (!$user instanceof User) return $user;
+    // public function editProfile()
+    // {
+    //     $user = $this->getAuthenticatedUserOrRedirect();
+    //     if (!$user instanceof User) return $user;
 
-        return view('edit-profile', compact('user'));
-    }
+    //     return view('edit-profile', compact('user'));
+    // }
 
     // Proses update profil
-    public function updateProfile(Request $request)
-    {
-        $user = $this->getAuthenticatedUserOrRedirect();
-        if (!$user instanceof User) return $user;
+    // public function updateProfile(Request $request)
+    // {
+    //     $user = $this->getAuthenticatedUserOrRedirect();
+    //     if (!$user instanceof User) return $user;
 
-        $validator = Validator::make($request->all(), [
-            'name'              => 'required|string|min:3',
-            'email'             => 'required|email|unique:users,email,' . $user->id,
-            'nik'               => 'required|digits:16|unique:users,nik,' . $user->id,
-            'no_kk'             => 'required|digits:16',
-            'phone'             => 'required|string|min:10',
-            'jumlah_keluarga'   => 'required|integer|min:1',
-            'password'          => 'nullable|string|min:8|confirmed',
-        ]);
+    //     $validator = Validator::make($request->all(), [
+    //         'name'              => 'required|string|min:3',
+    //         'email'             => 'required|email|unique:users,email,' . $user->id,
+    //         'nik'               => 'required|digits:16|unique:users,nik,' . $user->id,
+    //         'no_kk'             => 'required|digits:16',
+    //         'phone'             => 'required|string|min:10',
+    //         'jumlah_keluarga'   => 'required|integer|min:1',
+    //         'password'          => 'nullable|string|min:8|confirmed',
+    //     ]);
 
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
+    //     if ($validator->fails()) {
+    //         return back()->withErrors($validator)->withInput();
+    //     }
 
-        $user->update([
-            'name'              => $request->name,
-            'email'             => $request->email,
-            'nik'               => $request->nik,
-            'no_kk'             => $request->no_kk,
-            'phone'             => $request->phone,
-            'jumlah_keluarga'   => $request->jumlah_keluarga,
-            'password'          => $request->password ? Hash::make($request->password) : $user->password,
-        ]);
+    //     $user->update([
+    //         'name'              => $request->name,
+    //         'email'             => $request->email,
+    //         'nik'               => $request->nik,
+    //         'no_kk'             => $request->no_kk,
+    //         'phone'             => $request->phone,
+    //         'jumlah_keluarga'   => $request->jumlah_keluarga,
+    //         'password'          => $request->password ? Hash::make($request->password) : $user->password,
+    //     ]);
 
-        return redirect()->route('profile.edit')->with('message', 'Profil berhasil diperbarui.');
-    }
+    //     return redirect()->route('profile.edit')->with('message', 'Profil berhasil diperbarui.');
+    // }
 
 
     // 🔐 Ambil user dari JWT token di session

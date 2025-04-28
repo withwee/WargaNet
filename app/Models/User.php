@@ -16,11 +16,12 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'nik', 
         'no_kk', 
-        'jumlah_keluarga',
         'phone', 
         'password',
         'photo',
         'role',
+        'jumlah_LK',
+        'jumlah_PR'
     ];
 
     protected $hidden = [

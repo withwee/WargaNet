@@ -55,6 +55,10 @@ Route::middleware('auth.custom')->group(function () {
     Route::post('/pay/store', [IuranController::class, 'store'])->name('pay.store');
     Route::get('/pay/search', [IuranController::class, 'cari'])->name('pay.search');
     Route::post('/pay/{id}/bayar', [IuranController::class, 'bayar'])->name('pay.bayar');
+
+    Route::get('/profile', [ProfileController::class, 'editProfile'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'showEditForm'])->name('profile.edit');
+    Route::put('/profile/{id}', [ProfileController::class, 'update'])->name('profile.update');
 });
 
 Route::middleware(['auth.custom', 'admin'])->group(function () {
@@ -62,4 +66,3 @@ Route::middleware(['auth.custom', 'admin'])->group(function () {
     Route::put('/pengumuman/{id}', [PengumumanController::class, 'update'])->name('pengumuman.update');
     Route::delete('/pengumuman/{id}', [PengumumanController::class, 'destroy'])->name('pengumuman.destroy');
 });
-

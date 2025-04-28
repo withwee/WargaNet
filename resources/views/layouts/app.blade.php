@@ -18,17 +18,19 @@
 
         {{-- Main content --}}
         <main class="flex-1 p-6 ml-64">
-            {{-- Header --}}
+        {{-- Header --}}
             <header class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold capitalize text-gray-800">
                     {{ ucfirst(str_replace('-', ' ', Route::currentRouteName())) }}
                 </h1>
 
                 <div class="flex items-center gap-3">
-                    <a href="{{ route('edit.profile') }}" class="flex items-center gap-2">
+                    <a href="{{ route('profile.show') }}" class="flex items-center gap-2">
                         <span class="font-semibold text-gray-800">{{ $user->name ?? 'Guest' }}</span>
-                        <img src="{{ asset('images/profile.png') }}" alt="Profile"
-                             class="w-10 h-10 rounded-full border-2 border-white shadow-md">
+                        <img src="{{ auth()->user()->photo ? asset('storage/' . auth()->user()->photo) : asset('images/profile.png') }}" 
+                        alt="Profile Photo" 
+                        class="w-10 h-10 rounded-full border-2 border-white shadow-md object-cover">
+
                     </a>
                 </div>
             </header>
@@ -39,21 +41,5 @@
             </section>
         </main>
     </div>
-    
-
-    //Edit Profile
-    <head>
-    <meta charset="UTF-8">
-    <title>Profil Warga</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-blue-100 min-h-screen flex items-center justify-center">
-    <div class="w-full max-w-3xl bg-white p-6 rounded-xl shadow-lg">
-        @yield('content')
-    </div>
-</body>
-</html>
-
-    @stack('scripts')
 </body>
 </html>

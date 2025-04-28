@@ -2,9 +2,17 @@
 
 @section('content')
 <div class="container mx-auto p-4">
+    <!-- Tombol Kembali -->
+    <div class="mb-4">
+        <a href="{{ url()->previous() }}" class="text-blue-500 hover:text-blue-700">&larr; Kembali</a>
+    </div>
+
     <div class="bg-white rounded-lg shadow-md p-6 flex flex-col md:flex-row items-center gap-8">
         <div class="profile-pic text-center">
-            <img src="{{ asset('storage/' . auth()->user()->photo) }}" alt="Profile Photo" class="rounded-full w-40 h-40 object-cover">
+            <!-- Foto Profile Dinamis -->
+            <img src="{{ auth()->user()->photo ? asset('storage/' . auth()->user()->photo) : asset('default-profile.png') }}" 
+                 alt="Profile Photo" 
+                 class="rounded-full w-40 h-40 object-cover">
             <h2 class="mt-4 font-bold text-xl">{{ auth()->user()->name }}</h2>
         </div>
 
@@ -20,15 +28,16 @@
         </div>
     </div>
 
+    <!-- Form Edit Profile -->
     <div id="editForm" class="hidden mt-8 bg-white rounded-lg shadow-md p-6">
         <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" onsubmit="return confirmSubmit()">
             @csrf
             @method('PUT')
 
-            <!-- Ganti Foto -->
+            <!-- Upload Foto -->
             <div class="mb-4">
                 <label for="photo" class="block font-bold mb-1">Ganti Foto Profile</label>
-                <input type="file" name="photo" id="photo" accept="image/*" onclick="selectPhoto()" class="block">
+                <input type="file" name="photo" id="photo" accept="image/*" class="block">
             </div>
 
             <!-- Form Fields -->
@@ -65,10 +74,6 @@
 <script>
     function toggleEdit() {
         document.getElementById('editForm').classList.toggle('hidden');
-    }
-
-    function selectPhoto() {
-        alert("Ganti foto dari:\n1. Kamera\n2. Galeri\n3. File");
     }
 
     function confirmSubmit() {
