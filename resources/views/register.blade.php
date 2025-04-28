@@ -143,7 +143,7 @@
 
            <!-- Jumlah Anggota Keluarga -->
 <div class="space-y-1">
-    <label class="block text-sm font-medium text-gray-700">Jumlah Anggota Keluarga <span class="text-gray-500">(Termasuk Diri Sendiri)</span></label>
+    <label class="block text-sm font-medium text-gray-700">Jumlah Anggota Keluarga (Termasuk Diri Sendiri)<span class="text-gray-500">(Termasuk Diri Sendiri)</span></label>
     <div class="flex space-x-4">
         <!-- Laki-Laki -->
         <div class="w-1/2 relative">

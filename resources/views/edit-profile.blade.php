@@ -62,7 +62,7 @@
 
         <!-- Jumlah Anggota Keluarga -->
         <div class="mb-4">
-            <h3 class="text-sm font-bold mb-2">Jumlah Anggota Keluarga</h3>
+            <h3 class="text-sm font-bold mb-2">Jumlah Anggota Keluarga (Termasuk Diri Sendiri)</h3>
             <div class="flex gap-16 mt-2">
                 <div>
                     <label class="block text-sm font-bold mb-2" for="jumlah_LK">Laki-laki</label>

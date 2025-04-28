@@ -1,79 +1,76 @@
 @extends('layouts.app')
 
 @section("content")
-<div class="container mx-auto p-4">
+<div class="container mx-auto p-0">
 
     <!-- Card -->
-    <div class="bg-white rounded-2xl p-6 shadow-md">
+    <div class="bg-white rounded-2xl p-6 shadow">
 
-        <!-- Grid layout -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-2"> <!-- Gap diperkecil -->
+         <!-- Tombol Kembali -->
+         <a href="{{ route('pengumuman') }}"
+           class="border border-blue-500 text-gray-500 px-4 py-1 rounded-full text-sm mb-6 inline-block hover:bg-blue-500 hover:text-white transition">
+            &lt; Kembali
+        </a>
 
-            <!-- Left Profile -->
-            <div class="relative flex flex-col items-center">
+        <!-- Flex Layout -->
+        <div class="flex items-start gap-10">
 
-                <!-- Tombol Kembali -->
-                <a href="{{ route('profile.show') }}" class="absolute top-0 left-0 text-sm text-gray-500 flex items-center mt-2 ml-2">
-                    <span class="text-xl mr-1">&lt;</span> Kembali
-                </a>
-
-                <div class="flex flex-col items-center mt-12">
-                    <img src="{{ $user->photo ? asset('storage/' . $user->photo) : asset('images/profile.png') }}" 
-                    alt="Profile" 
-                    class="w-48 h-48 rounded-full object-cover mb-4 mt-12">
-                    <h2 class="text-lg font-bold text-center">{{ $user->name }}</h2>
-                </div>
-
+            <!-- Foto Profil dan Nama -->
+            <div class="flex flex-col items-center w-1/3">
+                <img src="{{ $user->photo ? asset('storage/' . $user->photo) : asset('images/profile.png') }}" 
+                     alt="Profile" 
+                     class="w-32 h-32 rounded-full object-cover">
+                <h2 class="mt-4 font-bold text-xl text-center">{{ $user->name }}</h2>
             </div>
 
-            <!-- Right Details (span 2 columns) -->
-            <div class="md:col-span-2 flex flex-col justify-between">
+            <!-- Detail User -->
+            <div class="w-2/3 flex flex-col gap-2">
+                <div>
+                    <p class="font-bold text-sm">Nama Lengkap</p>
+                    <p class="text-gray-500">{{ $user->name }}</p>
+                </div>
+                <div>
+                    <p class="font-bold text-sm">Email</p>
+                    <p class="text-gray-500">{{ $user->email }}</p>
+                </div>
+                <div>
+                    <p class="font-bold text-sm">Nomor Induk Kependudukan (NIK)</p>
+                    <p class="text-gray-500">{{ $user->nik }}</p>
+                </div>
+                <div>
+                    <p class="font-bold text-sm">Nomor Kartu Keluarga</p>
+                    <p class="text-gray-500">{{ $user->no_kk }}</p>
+                </div>
+                <div>
+                    <p class="font-bold text-sm">Nomor Handphone</p>
+                    <p class="text-gray-500">{{ $user->phone }}</p>
+                </div>
 
-                <div class="space-y-4">
-                    <div>
-                        <h3 class="text-sm font-bold">Nama Lengkap</h3>
-                        <p class="text-gray-500">{{ $user->name }}</p>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-bold">Email</h3>
-                        <p class="text-gray-500">{{ $user->email }}</p>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-bold">Nomor Induk Kependudukan (NIK)</h3>
-                        <p class="text-gray-500">{{ $user->nik }}</p>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-bold">Nomor Kartu Keluarga</h3>
-                        <p class="text-gray-500">{{ $user->no_kk }}</p>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-bold">Nomor Handphone</h3>
-                        <p class="text-gray-500">{{ $user->phone }}</p>
-                    </div>
+                <!-- Garis -->
+                <hr class="my-4 border-gray-300">
 
-                    <hr class="my-4">
-
-                    <div>
-                        <h3 class="text-sm font-bold">Jumlah Anggota Keluarga</h3>
-                        <div class="grid grid-cols-2 gap-4 mt-2 items-center">
-                            <div class="flex flex-col">
-                                <h4 class="text-sm font-bold">Laki-laki</h4>
-                                <p class="text-gray-500">{{ $user->jumlah_LK ?? '-' }}</p>
-
-                                <!-- Tombol Edit Profile -->
-                                <a href="{{ route('profile.edit') }}" class="mt-4 border border-blue-400 text-blue-400 rounded-lg px-6 py-2 hover:bg-blue-50 transition w-max">
-                                    Edit Profile
-                                </a>
-                            </div>
-
-                            <div>
-                                <h4 class="text-sm font-bold">Perempuan</h4>
-                                <p class="text-gray-500">{{ $user->jumlah_PR ?? '-' }}</p>
-                            </div>
+                <!-- Jumlah Anggota Keluarga -->
+                <div>
+                    <p class="text-sm font-bold text-gray-400 mb-2">Jumlah Anggota Keluarga (Termasuk Diri Sendiri)</p>
+                    <div class="flex gap-20 mt-2">
+                        <div>
+                            <p class="font-bold text-sm">Laki-laki</p>
+                            <p class="text-gray-500">{{ $user->jumlah_LK ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="font-bold text-sm">Perempuan</p>
+                            <p class="text-gray-500">{{ $user->jumlah_PR ?? '-' }}</p>
                         </div>
                     </div>
                 </div>
 
+                <!-- Tombol Edit Profile -->
+                <div class="mt-6">
+                    <a href="{{ route('profile.edit') }}" 
+                       class="border border-blue-500 text-gray-500 font-semibold px-6 py-2 rounded-full hover:bg-blue-500 hover:text-white transition">
+                        Edit Profile
+                    </a>
+                </div>
             </div>
 
         </div>
