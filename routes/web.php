@@ -7,7 +7,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\IuranController;
-use App\Http\Controllers\MidtransController;
+use App\Http\Controllers\PaymentController;
 
 // Public routes (guest only)
 Route::middleware('redirect.custom')->group(function () {
@@ -59,6 +59,10 @@ Route::middleware('auth.custom')->group(function () {
 
     // New route for succespay view
     Route::get('/transaction', [IuranController::class, 'transaction'])->name('transaction');
+
+    Route::get('/profile', [ProfileController::class, 'editProfile'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'showEditForm'])->name('profile.edit');
+    Route::put('/profile/{id}', [ProfileController::class, 'update'])->name('profile.update');
 });
 
 // Admin-only routes

@@ -150,9 +150,9 @@
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <i class="fas fa-mars text-gray-400"></i>
             </div>
-            <input type="number" id="jumlah_laki_laki" name="jumlah_laki_laki" min="0" value="{{ old('jumlah_laki_laki', 0) }}"
+            <input type="number" id="jumlah_LK" name="jumlah_LK" min="0" value="{{ old('jumlah_LK', 0) }}"
                    class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                   placeholder="Laki-Laki" required>
+                   placeholder="Jumlah Laki-laki" required>
         </div>
 
         <!-- Perempuan -->
@@ -160,15 +160,12 @@
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <i class="fas fa-venus text-gray-400"></i>
             </div>
-            <input type="number" id="jumlah_perempuan" name="jumlah_perempuan" min="0" value="{{ old('jumlah_perempuan', 0) }}"
+            <input type="number" id="jumlah_PR" name="jumlah_PR" min="0" value="{{ old('jumlah_PR', 0) }}"
                    class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                   placeholder="Perempuan" required>
+                   placeholder="Jumlah Perempuan" required>
         </div>
     </div>
 </div>
-
-<!-- Hidden input untuk total jumlah_keluarga -->
-<input type="hidden" id="jumlah_keluarga" name="jumlah_keluarga" value="{{ old('jumlah_keluarga', 0) }}">
 
 <!-- Nomor Telepon -->
 <div class="space-y-1">
@@ -247,25 +244,6 @@
                 }
             @endforeach
         @endif
-
-        // ===== Update jumlah_keluarga berdasarkan laki-laki + perempuan =====
-        const lakiInput = document.getElementById('jumlah_laki_laki');
-        const perempuanInput = document.getElementById('jumlah_perempuan');
-        const totalInput = document.getElementById('jumlah_keluarga');
-
-        function updateJumlahKeluarga() {
-            const laki = parseInt(lakiInput?.value) || 0;
-            const perempuan = parseInt(perempuanInput?.value) || 0;
-            if (totalInput) {
-                totalInput.value = laki + perempuan;
-            }
-        }
-
-        if (lakiInput && perempuanInput) {
-            lakiInput.addEventListener('input', updateJumlahKeluarga);
-            perempuanInput.addEventListener('input', updateJumlahKeluarga);
-            updateJumlahKeluarga(); // Hitung saat pertama kali halaman dimuat
-        }
     });
 </script>
 </body>

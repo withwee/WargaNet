@@ -4,32 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Dashboard - Warganet')</title>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    
     @stack('styles')
 </head>
-<body>
-    <div class="flex font-[Poppins]">
-        <x-sidebar/>
-        <main class="w-full p-6 bg-sky-100 min-h-screen ml-64">
-            <div class="flex justify-between items-center mb-6">
-                <div class="flex gap-2">
-                    <h1 class="!font-bold !text-xl">
-                        {{ ucfirst(str_replace('-', ' ', Route::currentRouteName())) }}
-                    </h1>
-                </div>
-                <div class="flex items-center gap-4">
-                    <h1 class="!font-bold !text-xl">{{ $user->name ?? 'Guest' }}</h1>
-                    <img src="{{ asset('images/profile.png') }}" alt="profile" class="w-10 h-10 rounded-full">
-                </div>
-            </div>
+<body class="bg-sky-100 font-[Poppins]">
+    <div class="flex min-h-screen">
+        {{-- Sidebar --}}
+        <x-sidebar />
 
-            @yield('content')
+        {{-- Main content --}}
+        <main class="flex-1 p-6 ml-64">
+        {{-- Header --}}
+            <header class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold capitalize text-gray-800">
+                    {{ ucfirst(str_replace('-', ' ', Route::currentRouteName())) }}
+                </h1>
+
+                <div class="flex items-center gap-3">
+                    <a href="{{ route('profile.show') }}" class="flex items-center gap-2">
+                        <span class="font-semibold text-gray-800">{{ $user->name ?? 'Guest' }}</span>
+                        <img src="{{ auth()->user()->photo ? asset('storage/' . auth()->user()->photo) : asset('images/profile.png') }}" 
+                        alt="Profile Photo" 
+                        class="w-10 h-10 rounded-full border-2 border-white shadow-md object-cover">
+
+                    </a>
+                </div>
+            </header>
+
+            {{-- Page content --}}
+            <section>
+                @yield('content')
+            </section>
         </main>
     </div>
-
-    @stack('scripts')
 </body>
-
 </html>
