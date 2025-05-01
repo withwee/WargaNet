@@ -17,3 +17,4 @@ class AuthMiddleware
         return $next($request);
     }
 }
+

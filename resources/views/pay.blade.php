@@ -4,6 +4,7 @@
 
 @section('content')
 
+
 <div class="max-w-screen space-y-6">
 
     {{-- Flash Message --}}
@@ -51,40 +52,10 @@
                                         Sudah Bayar
                                     </span>
                                 @else
-                                    <button id="pay-button-{{ $iuran->id_bayar }}" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm px-10 py-2 rounded-full transition">
+                                    <button id="pay-button-{{ $iuran->id_bayar }}" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm px-10 py-2 rounded-full transition" data-id="{{ $iuran->id_bayar }}">
                                         <i class="fas fa-wallet"></i> Bayar
                                     </button>
-                                    <script>
-                                        document.getElementById('pay-button-{{ $iuran->id_bayar }}').addEventListener('click', function () {
-                                            fetch('/pay/snap-token/{{ $iuran->id_bayar }}')
-                                                .then(response => {
-                                                    if (!response.ok) {
-                                                        throw new Error('Gagal mendapatkan Snap Token. Silakan coba lagi.');
-                                                    }
-                                                    return response.json();
-                                                })
-                                                .then(data => {
-                                                    if (!data.snapToken) {
-                                                        throw new Error('Snap Token tidak tersedia. Silakan coba lagi.');
-                                                    }
-                                                    snap.pay(data.snapToken, {
-                                                        onSuccess: function(result) {
-                                                            alert('Pembayaran berhasil!');
-                                                            location.reload();
-                                                        },
-                                                        onPending: function(result) {
-                                                            alert('Menunggu pembayaran...');
-                                                        },
-                                                        onError: function(result) {
-                                                            alert('Pembayaran gagal!');
-                                                        }
-                                                    });
-                                                })
-                                                .catch(error => {
-                                                    alert(error.message);
-                                                });
-                                        });
-                                    </script>
+                                    <span id="payment-status-{{ $iuran->id_bayar }}" class="text-sm font-semibold ml-2"></span>
                                 @endif
                             </td>
                         </tr>
@@ -127,4 +98,55 @@
 
 @push('scripts')
 <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
+<script>
+document.querySelectorAll('button[id^="pay-button-"]').forEach(button => {
+    button.addEventListener('click', function () {
+        const idBayar = this.getAttribute('data-id');
+        const statusSpan = document.getElementById('payment-status-' + idBayar);
+        statusSpan.textContent = 'Memproses pembayaran...';
+        this.disabled = true;
+
+        fetch('/pay/snap-token/' + idBayar)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Gagal mendapatkan Snap Token. Silakan coba lagi.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data.snapToken) {
+                    throw new Error('Snap Token tidak tersedia. Silakan coba lagi.');
+                }
+
+                snap.pay(data.snapToken, {
+                    onSuccess: function(result) {
+                        statusSpan.textContent = 'Pembayaran berhasil, memuat ulang...';
+                        setTimeout(() => {
+                            window.location.href = `/bayar-iuran/success/${result.order_id}`;
+                        }, 1000);
+                    },
+                    onPending: function(result) {
+                        statusSpan.textContent = 'Menunggu pembayaran...';
+                        alert('Menunggu pembayaran...');
+                    },
+                    onError: function(result) {
+                        statusSpan.textContent = 'Pembayaran gagal!';
+                        alert('Pembayaran gagal!');
+                        button.disabled = false;
+                    },
+                    onClose: function() {
+                        statusSpan.textContent = '';
+                        alert('Anda menutup popup pembayaran.');
+                        button.disabled = false;
+                    }
+                });
+            })
+            .catch(error => {
+                statusSpan.textContent = '';
+                alert(error.message);
+                button.disabled = false;
+            });
+    });
+});
+</script>
 @endpush
