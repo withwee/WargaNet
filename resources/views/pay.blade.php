@@ -105,6 +105,7 @@ document.querySelectorAll('button[id^="pay-button-"]').forEach(button => {
         const statusSpan = document.getElementById('payment-status-' + idBayar);
         statusSpan.textContent = 'Memproses pembayaran...';
         this.disabled = true;
+        const currentButton = this;
 
         fetch('/pay/snap-token/' + idBayar)
             .then(response => {
@@ -132,19 +133,19 @@ document.querySelectorAll('button[id^="pay-button-"]').forEach(button => {
                     onError: function(result) {
                         statusSpan.textContent = 'Pembayaran gagal!';
                         alert('Pembayaran gagal!');
-                        button.disabled = false;
+                        currentButton.disabled = false;
                     },
                     onClose: function() {
                         statusSpan.textContent = '';
                         alert('Anda menutup popup pembayaran.');
-                        button.disabled = false;
+                        currentButton.disabled = false;
                     }
                 });
             })
             .catch(error => {
                 statusSpan.textContent = '';
                 alert(error.message);
-                button.disabled = false;
+                currentButton.disabled = false;
             });
     });
 });
