@@ -100,14 +100,22 @@
 <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
 <script>
 document.querySelectorAll('button[id^="pay-button-"]').forEach(button => {
-    button.addEventListener('click', function () {
+button.addEventListener('click', function () {
         const idBayar = this.getAttribute('data-id');
+        console.log('Bayar button clicked', idBayar);
         const statusSpan = document.getElementById('payment-status-' + idBayar);
         statusSpan.textContent = 'Memproses pembayaran...';
         this.disabled = true;
         const currentButton = this;
 
-        fetch('/pay/snap-token/' + idBayar)
+        fetch('/pay/snap-token/' + idBayar, {
+                method: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Gagal mendapatkan Snap Token. Silakan coba lagi.');
@@ -115,6 +123,7 @@ document.querySelectorAll('button[id^="pay-button-"]').forEach(button => {
                 return response.json();
             })
             .then(data => {
+                console.log('Fetch response:', data);
                 if (!data.snapToken) {
                     throw new Error('Snap Token tidak tersedia. Silakan coba lagi.');
                 }
@@ -143,6 +152,7 @@ document.querySelectorAll('button[id^="pay-button-"]').forEach(button => {
                 });
             })
             .catch(error => {
+                console.error('Fetch error:', error);
                 statusSpan.textContent = '';
                 alert(error.message);
                 currentButton.disabled = false;
