@@ -71,6 +71,7 @@
     </div>
 
     {{-- Buat Iuran --}}
+    @if(auth()->user() && auth()->user()->role === 'admin')
     <h2 class="text-2xl font-bold text-gray-800">Buat Iuran</h2>
 
     <div class="bg-white p-6 rounded-xl shadow space-y-6">
@@ -91,6 +92,7 @@
             </div>
         </form>
     </div>
+    @endif
 
 </div>
 
