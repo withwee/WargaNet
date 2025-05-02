@@ -16,9 +16,9 @@
     @endif
 
     {{-- Bayar Iuran --}}
-    <h2 class="text-2xl font-bold text-gray-800">Bayar Iuran</h2>
+    {{-- <h2 class="text-2xl font-bold text-gray-800">Bayar Iuran</h2> --}}
 
-    <div class="bg-white p-6 rounded-xl shadow space-y-6">
+    <div class="bg-white p-6 rounded-xl shadow space-y-6 mt-6">
         <!-- Search -->
         <form action="{{ route('iuran.cari') }}" method="GET" class="mb-6">
             <div class="flex items-center gap-2">

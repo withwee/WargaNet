@@ -22,7 +22,19 @@
         {{-- Header --}}
             <header class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold capitalize text-gray-800">
-                    {{ ucfirst(str_replace('-', ' ', Route::currentRouteName())) }}
+                    @php
+                        $routeName = Route::currentRouteName();
+                        $routeTitles = [
+                            'iuran.cari' => 'Bayar Iuran',
+                            'iuran.store' => '',
+                            'iuran.bayar' => 'Bayar Iuran',
+                            'pay.index' => 'Bayar Iuran',
+                            'pay.bayar' => 'Bayar Iuran',
+                            // Add other route mappings as needed
+                        ];
+                        $title = $routeTitles[$routeName] ?? ucfirst(str_replace(['-', '.'], ' ', $routeName));
+                    @endphp
+                    {{ $title }}
                 </h1>
 
                 <div class="flex items-center gap-3">
