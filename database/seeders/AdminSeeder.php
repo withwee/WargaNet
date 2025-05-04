@@ -17,7 +17,8 @@ class AdminSeeder extends Seeder
             'nik'      => '1234567890123458',
             'no_kk'    => '1234567890123458',
             'phone'    => '08123456789',
-            'jumlah_keluarga' => 1,
+            'jumlah_LK' => 1,
+            'jumlah_PR' => 1,
             'role'     => 'admin',
         ]);
     }}
