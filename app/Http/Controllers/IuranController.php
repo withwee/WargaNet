@@ -73,11 +73,16 @@ class IuranController extends Controller
     {
         $no_kk = $request->no_kk;
 
+        // Validasi no_kk kosong atau tidak valid
+        if (empty($no_kk) || !is_string($no_kk)) {
+            return redirect()->route('pay.index')->with('error', 'no kk tidak valid silakan isi yg valid');
+        }
+
         // Cari user berdasarkan no_kk
         $user = User::where('no_kk', $no_kk)->first();
 
         if (!$user) {
-            return redirect()->back()->with('error', 'Nomor KK tidak ditemukan.');
+            return redirect()->route('pay.index')->with('error', 'no kk tidak valid silakan isi yg valid');
         }
 
         // Ambil iuran berdasarkan user_id

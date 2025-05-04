@@ -15,6 +15,13 @@
         </div>
     @endif
 
+    @if(session('error'))
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <strong class="font-bold">Error!</strong>
+            <span class="block sm:inline">{{ session('error') }}</span>
+        </div>
+    @endif
+
     {{-- Bayar Iuran --}}
     {{-- <h2 class="text-2xl font-bold text-gray-800">Bayar Iuran</h2> --}}
 
