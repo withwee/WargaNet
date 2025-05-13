@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\IuranController;
+use App\Http\Controllers\MidtransController;
 use App\Http\Controllers\PaymentController;
 
 // Public routes (guest only)

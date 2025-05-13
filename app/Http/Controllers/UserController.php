@@ -185,6 +185,10 @@ class UserController extends Controller
             return redirect()->route('login.view')->withErrors(['error' => 'Token tidak valid atau kedaluwarsa']);
         }
 
+        if ($user->role === 'admin') {
+            return view('admin.dashboardAdmin', compact('user'));
+        }
+
         return view('dashboard', compact('user'));
     }
 
