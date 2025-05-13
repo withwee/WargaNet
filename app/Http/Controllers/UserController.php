@@ -181,9 +181,6 @@ class UserController extends Controller
                 return redirect()->route('login.view')->withErrors(['error' => 'User tidak ditemukan']);
             }
 
-            if ($user->role !== 'admin') {
-                return redirect()->route('home')->withErrors(['error' => 'Anda tidak memiliki akses ke halaman ini.']);
-            }
         } catch (TokenInvalidException | TokenExpiredException | JWTException $e) {
             return redirect()->route('login.view')->withErrors(['error' => 'Token tidak valid atau kedaluwarsa']);
         }
