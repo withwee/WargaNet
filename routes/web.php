@@ -2,13 +2,13 @@
 
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ForumController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\IuranController;
 use App\Http\Controllers\MidtransController;
-use App\Http\Controllers\PaymentController;
+
 
 // Public routes (guest only)
 Route::middleware('redirect.custom')->group(function () {
@@ -36,7 +36,13 @@ Route::middleware('auth.custom')->group(function () {
     Route::post('/pengumuman/{id}/toggle-khusus', [PengumumanController::class, 'toggleKhusus'])->name('pengumuman.toggleKhusus');
 
     // Forum dan Kalender
-    Route::get('/forum', [UserController::class, 'forum'])->name('forum');
+    // Forum dan Komentar
+    Route::controller(ForumController::class)->group(function () {
+    Route::get('/forum', 'index')->name('forum');
+    Route::post('/forum', 'store')->name('forum.store');
+    });
+
+    Route::post('/forum/{forum}/comment', [CommentController::class, 'store'])->name('comment.store');
     Route::get('/kalender', [UserController::class, 'kalender'])->name('kalender');
     
     // Route Iuran
@@ -56,12 +62,11 @@ Route::middleware('auth.custom')->group(function () {
     Route::get('/bayar-iuran/success/{id}', [IuranController::class, 'success']);
     Route::post('/midtrans/callback', [MidtransController::class, 'callback']);
     Route::get('/bayar-iuran/success', function () {return view('bayar.successpay');});
-    
 
     // New route for succespay view
     Route::get('/transaction', [IuranController::class, 'transaction'])->name('transaction');
 
-    Route::get('/profile', [ProfileController::class, 'editProfile'])->name('profile.show');
+    Route::get('/profile', [ProfileController::class, 'showEditForm'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'showEditForm'])->name('profile.edit');
     Route::put('/profile/{id}', [ProfileController::class, 'update'])->name('profile.update');
 });
@@ -73,3 +78,5 @@ Route::middleware(['auth.custom', 'admin'])->group(function () {
     Route::delete('/pengumuman/{id}', [PengumumanController::class, 'destroy'])->name('pengumuman.destroy');
     
 });
+
+
