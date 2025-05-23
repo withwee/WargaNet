@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kegiatan;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Pengumuman;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+
 
 class UserController extends Controller
 {
@@ -225,13 +228,26 @@ class UserController extends Controller
         return view('pay');
     }
 
-    public function kalender()
-    {
-        $user = $this->getAuthenticatedUserOrRedirect();
-        if (!$user instanceof User) return $user;
+  public function kalender(Request $request)
+{
+    $user = $this->getAuthenticatedUserOrRedirect();
+    if (!$user instanceof User) return $user;
 
-        return view('kalender');
+    $month = $request->input('month');
+    $year = $request->input('year');
+
+    $currentDate = Carbon::now();
+    if ($month && $year) {
+        $currentDate = Carbon::createFromDate($year, $month, 1);
     }
+
+    $kalendars = Kegiatan::whereMonth('tanggal', $currentDate->month)
+        ->whereYear('tanggal', $currentDate->year)
+        ->get();
+
+    return view($user->role === 'admin' ? 'admin.kalenderAdmin' : 'kalender', compact('kalendars', 'currentDate'));
+}
+
 
     public function pembayaran()
     {
