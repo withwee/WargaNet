@@ -8,6 +8,16 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\IuranController;
 use App\Http\Controllers\MidtransController;
+use App\Http\Controllers\CalendarController;
+
+
+
+//Calendar routes
+Route::get('/kalender', [CalendarController::class, 'index']);
+Route::get('/admin/kalender', [CalendarController::class, 'adminIndex']);
+Route::post('/admin/kalender', [CalendarController::class, 'store']);
+Route::get('/kalender', [CalendarController::class, 'index'])->name('calendar.index');
+Route::get('/kalender', [CalendarController::class, 'index']);
 
 
 // Public routes (guest only)
