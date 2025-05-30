@@ -26,4 +26,16 @@ class CommentController extends Controller
 
         return redirect()->back()->with('message', 'Komentar berhasil ditambahkan.');
     }
+
+    public function destroy($id)
+{
+    $comment = Comment::findOrFail($id);
+    if (auth()->user()->role !== 'admin') {
+        abort(403, 'Unauthorized action.');
+    }
+
+    $comment->delete();
+
+    return redirect()->back()->with('success', 'Komentar berhasil dihapus.');
+}
 }

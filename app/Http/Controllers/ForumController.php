@@ -37,8 +37,22 @@ class ForumController extends Controller
         'konten' => $request->konten,
         'gambar' => $gambarPath,
     ]);
+    
 
     return redirect()->back()->with('message', 'Forum berhasil diposting.');
+}
+public function destroy($id)
+{
+    $forum = Forum::findOrFail($id);
+
+    // Pastikan hanya admin yang bisa menghapus
+    if (auth()->user()->role !== 'admin') {
+        abort(403, 'Unauthorized action.');
+    }
+
+    $forum->delete();
+
+    return redirect()->route('forum')->with('success', 'Postingan berhasil dihapus.');
 }
 
 }

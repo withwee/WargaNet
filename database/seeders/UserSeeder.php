@@ -16,7 +16,8 @@ class UserSeeder extends Seeder
             'nik'      => '1234567890123458', // Tambahkan nilai untuk nik
             'no_kk'    => '1234567890123458',
             'phone'    => '08123456789',
-            'jumlah_keluarga' => 1,
+            'jumlah_LK' => 0,
+            'jumlah_PR' => 0,
             'role'     => 'admin',
         ]);
     }
