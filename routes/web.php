@@ -1,3 +1,4 @@
+
 <?php
 
 use App\Http\Controllers\UserController;
@@ -30,7 +31,11 @@ Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 // Routes setelah login
 Route::middleware('auth.custom')->group(function () {
 
+    // Route untuk dashboard warga
     Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
+
+    // Route untuk dashboard admin
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
     // Pengumuman
     Route::resource('pengumuman', PengumumanController::class)->names([

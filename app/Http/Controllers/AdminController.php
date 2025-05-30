@@ -9,21 +9,20 @@ use App\Models\User;
 use App\Models\Pengumuman;
 use App\Models\Kegiatan;
 
+
 class AdminController extends Controller
 {
     public function dashboard()
-    {
-        $totalIuran = Iuran::sum('total_bayar');
-        $totalPengeluaran = Pengeluaran::sum('amount');
-        $jumlahWarga = User::count();
-        $jumlahPengumuman = Pengumuman::count();
-        $jumlahAcara = Kegiatan::count();
+{
+    $totalIuran = Iuran::sum('total_bayar'); // Pastikan kolom 'total_bayar' ada di tabel 'iurans'
+    $totalPengeluaran = Pengeluaran::sum('amount'); // Pastikan kolom 'amount' ada di tabel 'pengeluarans'
+    $jumlahPengumuman = Pengumuman::count();
+    $jumlahAcara = Kegiatan::count();
+    $jumlahIuran = Iuran::count();
+    $jumlahIuranTersisa = $totalIuran - $totalPengeluaran;
 
-        $jumlahIuranTersisa = $totalIuran - $totalPengeluaran;
-
-        return view('admin.dashboardAdmin', compact('totalIuran', 'totalPengeluaran', 'jumlahWarga', 'jumlahPengumuman', 'jumlahAcara', 'jumlahIuranTersisa'));
-    }
-
+    return view('admin.dashboardAdmin', compact('totalIuran', 'totalPengeluaran', 'jumlahPengumuman', 'jumlahAcara', 'jumlahIuran', 'jumlahIuranTersisa'));
+}
     public function storePengeluaran(Request $request)
     {
         $request->validate([
@@ -36,6 +35,6 @@ class AdminController extends Controller
             'amount' => $request->amount,
         ]);
 
-        return redirect()->route('dashboard')->with('success', 'Pengeluaran berhasil ditambahkan.');
+        return redirect()->route('admin.dashboard')->with('success', 'Pengeluaran berhasil ditambahkan.');
     }
 }

@@ -26,19 +26,19 @@
 
         {{-- Statistik --}}
         <div class="space-y-3 mt-6">
-            <h1 class="font-bold text-xl">Statistik Warga</h1>
+            <h1 class="font-bold text-xl">Statistik</h1>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 <div class="bg-blue-100 p-6 rounded-lg shadow text-center">
-                    <h2 class="text-xl font-semibold mb-4">Jumlah Warga</h2>
-                    <p class="text-blue-700 text-3xl font-bold">{{ $jumlahWarga ?? 0 }}</p>
+                    <h2 class="text-xl font-semibold mb-4">Jumlah Pengumuman</h2>
+                    <p class="text-blue-700 text-3xl font-bold">{{ $jumlahPengumuman ?? 0 }}</p>
                 </div>
                 <div class="bg-yellow-100 p-6 rounded-lg shadow text-center">
-                    <h2 class="text-xl font-semibold mb-4">Jumlah Pengumuman</h2>
-                    <p class="text-yellow-700 text-3xl font-bold">{{ $jumlahPengumuman ?? 0 }}</p>
+                    <h2 class="text-xl font-semibold mb-4">Jumlah Acara</h2>
+                    <p class="text-yellow-700 text-3xl font-bold">{{ $jumlahAcara ?? 0 }}</p>
                 </div>
                 <div class="bg-green-100 p-6 rounded-lg shadow text-center">
-                    <h2 class="text-xl font-semibold mb-4">Jumlah Acara</h2>
-                    <p class="text-green-700 text-3xl font-bold">{{ $jumlahAcara ?? 0 }}</p>
+                    <h2 class="text-xl font-semibold mb-4">Jumlah Iuran</h2>
+                    <p class="text-green-700 text-3xl font-bold">{{ $jumlahIuran ?? 0 }}</p>
                 </div>
             </div>
         </div>
