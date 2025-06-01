@@ -100,7 +100,7 @@ class UserController extends Controller
             ],
         ]);
 
-        return redirect()->route('dashboard')->with('message', 'Login berhasil');
+        return redirect()->route('admin.dashboard')->with('message', 'Login berhasil');
     }
 
     // USER LOGIN
@@ -190,11 +190,11 @@ class UserController extends Controller
             return redirect()->route('login.view')->withErrors(['error' => 'Token tidak valid atau kedaluwarsa']);
         }
 
-        if ($user->role === 'admin') {
-            return view('admin.dashboardAdmin', compact('user'));
+        if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.dashboard');
         }
-
-        return view('dashboard', compact('user'));
+    
+        return view('user.dashboard'); // atau view('dashboard')
     }
 
     // PENGUMUMAN (user & admin)
