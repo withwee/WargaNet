@@ -44,9 +44,6 @@ Route::middleware('auth.custom')->group(function () {
     // Route untuk dashboard warga
     Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
 
-    // Route untuk dashboard admin
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-
     // Pengumuman
     Route::resource('pengumuman', PengumumanController::class)->names([
         'index' => 'pengumuman',
@@ -94,17 +91,15 @@ Route::middleware('auth.custom')->group(function () {
 });
 
 
-// Admin-only routes
-Route::middleware(['auth.custom', 'admin'])->group(function () {
+    // Admin-only routes
+    Route::middleware(['auth.custom', 'admin'])->group(function () {
     Route::post('/pengumuman', [PengumumanController::class, 'store'])->name('pengumuman.store');
     Route::post('/admin/pengeluaran', [AdminController::class, 'storePengeluaran'])->name('admin.pengeluaran.store');
     Route::put('/pengumuman/{id}', [PengumumanController::class, 'update'])->name('pengumuman.update');
     Route::delete('/pengumuman/{id}', [PengumumanController::class, 'destroy'])->name('pengumuman.destroy');
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/admin/dashboardAdmin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::delete('/forum/{id}', [ForumController::class, 'destroy'])->name('forum.destroy');
     Route::delete('/comment/{id}', [CommentController::class, 'destroy'])->name('comment.destroy');
-
-    // Admin forum routes
     Route::get('/admin/forum', [AdminForumController::class, 'index'])->name('admin.forum.index');
     Route::post('/admin/forum/store', [AdminForumController::class, 'store'])->name('admin.forum.store');
     Route::post('/admin/forum/{forumId}/reply', [AdminForumController::class, 'reply'])->name('admin.forum.reply');

@@ -194,7 +194,7 @@ class UserController extends Controller
             return redirect()->route('admin.dashboard');
         }
     
-        return view('user.dashboard'); // atau view('dashboard')
+        return view('dashboard');
     }
 
     // PENGUMUMAN (user & admin)
