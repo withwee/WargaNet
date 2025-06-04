@@ -11,7 +11,7 @@ use App\Http\Controllers\IuranController;
 use App\Http\Controllers\MidtransController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\KegiatanController;
-
+use App\Http\Controllers\NotifController;
 
 
 //Calendar routes
@@ -39,7 +39,13 @@ Route::middleware('redirect.custom')->group(function () {
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
 // Routes setelah login
-Route::middleware('auth.custom')->group(function () {
+    Route::middleware('auth.custom')->group(function () {
+        // Remove notification read routes and test route
+
+    Route::get('/notifikasi/unread-count', function () {
+        $count = \App\Models\Notification::where('user_id', auth()->id())->where('read', 0)->count();
+        return response()->json(['unread_count' => $count]);
+    });
 
     // Route untuk dashboard warga
     Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
@@ -49,9 +55,6 @@ Route::middleware('auth.custom')->group(function () {
         'index' => 'pengumuman',
     ]);
     Route::post('/pengumuman/{id}/toggle-khusus', [PengumumanController::class, 'toggleKhusus'])->name('pengumuman.toggleKhusus');
-
-    // Forum dan Kalender
-    // Forum dan Komentar
     Route::controller(ForumController::class)->group(function () {
     Route::get('/forum', 'index')->name('forum');
     Route::post('/forum', 'store')->name('forum.store');
@@ -89,7 +92,6 @@ Route::middleware('auth.custom')->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'showEditForm'])->name('profile.edit');
     Route::put('/profile/{id}', [ProfileController::class, 'update'])->name('profile.update');
 });
-
 
     // Admin-only routes
     Route::middleware(['auth.custom', 'admin'])->group(function () {

@@ -55,14 +55,44 @@ class PengumumanController extends Controller
             Pengumuman::where('pengumuman_khusus', true)->update(['pengumuman_khusus' => false]);
         }
 
-        Pengumuman::create([
+        // Simpan pengumuman baru dan ambil objeknya
+        $pengumuman = Pengumuman::create([
             'judulPengumuman' => $request->judulPengumuman,
             'isiPengumuman' => $request->isiPengumuman,
             'pengumuman_khusus' => $request->has('pengumuman_khusus'),
         ]);
 
+        // Kirim notifikasi ke semua user (kecuali admin)
+        $users = \App\Models\User::where('role', '!=', 'admin')->get();
+        foreach ($users as $user) {
+            \App\Models\Notification::create([
+                'user_id' => $user->id,
+                'type' => 'pengumuman',
+                'message' => 'Ada pengumuman baru: ' . $pengumuman->judulPengumuman,
+            ]);
+
+            // Hapus notifikasi lama, sisakan 5 terbaru
+            $notifToDelete = \App\Models\Notification::where('user_id', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->skip(5)
+                ->take(PHP_INT_MAX)
+                ->get();
+
+            foreach ($notifToDelete as $notif) {
+                $notif->delete();
+            }
+        }
+
         return redirect()->route('pengumuman')->with('success', 'Pengumuman berhasil ditambahkan!');
     }
+
+    //     $pengumuman = Pengumuman::create([
+    //     'judul' => $request->judul,
+    //     'isi' => $request->isi,
+    //     ]);
+    
+    //     return redirect()->route('pengumuman')->with('success', 'Pengumuman berhasil dibuat!');
+    // }
 
     // Update pengumuman
     public function update(Request $request, $id)
@@ -102,4 +132,5 @@ class PengumumanController extends Controller
 
         return redirect()->route('pengumuman')->with('success', 'Status pengumuman berhasil diubah!');
     }
+
 }

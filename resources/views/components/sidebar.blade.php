@@ -60,6 +60,5 @@
             <iconify-icon icon="mdi:logout" class="text-xl"></iconify-icon>
             <button type="submit" class="logout-button">Logout</button>
         </form>
-
     </nav>
 </aside>
