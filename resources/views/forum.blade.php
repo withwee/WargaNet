@@ -59,6 +59,16 @@
                     <p class="text-sm text-gray-500">{{ $forum->created_at->format('d M Y H:i') }}</p>
                 </div>
             </div>
+            {{-- Tombol hapus post untuk admin --}}
+            @if(auth()->user() && auth()->user()->role === 'admin')
+                <form action="{{ route('admin.forum.deletePost', $forum->id) }}" method="POST" onsubmit="return confirm('Yakin hapus post ini?')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="text-red-500 hover:text-red-700 ml-2">
+                        <iconify-icon icon="mdi:delete"></iconify-icon>
+                    </button>
+                </form>
+            @endif
         </div>
         
         <p class="mb-3">{{ $forum->konten }}</p>
@@ -82,7 +92,7 @@
             
             <!-- Daftar komentar -->
             @foreach($forum->comments as $comment)
-            <div class="flex gap-3 mb-2">
+            <div class="flex gap-3 mb-2 items-center">
                 <img src="{{ $comment->user->photo ? asset('storage/' . $comment->user->photo) : asset('images/profile.png') }}" 
                      alt="Profile Photo" 
                      class="w-8 h-8 rounded-full border border-gray-200 object-cover">
@@ -93,6 +103,16 @@
                     </div>
                     <p class="text-xs text-gray-500 mt-1">{{ $comment->created_at->format('d M Y H:i') }}</p>
                 </div>
+                {{-- Tombol hapus komentar untuk admin --}}
+                @if(auth()->user() && auth()->user()->role === 'admin')
+                    <form action="{{ route('admin.forum.deleteComment', $comment->id) }}" method="POST" onsubmit="return confirm('Yakin hapus komentar ini?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="text-red-500 hover:text-red-700 ml-2">
+                            <iconify-icon icon="mdi:delete"></iconify-icon>
+                        </button>
+                    </form>
+                @endif
             </div>
             @endforeach
         </div>
