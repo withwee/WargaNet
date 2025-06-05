@@ -153,7 +153,7 @@ class UserController extends Controller
             ],
         ]);
 
-        return redirect()->route('pengumuman')->with('message', 'Login berhasil');
+        return redirect()->route('dashboard')->with('message', 'Login berhasil');
     }
 
     // LOGOUT
