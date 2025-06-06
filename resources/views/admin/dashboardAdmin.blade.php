@@ -73,8 +73,35 @@
                 </div>
                 <div class="bg-white px-4 py-6 rounded-xl flex flex-col items-center justify-center shadow">
                     <h1 class="text-blue-500 font-extrabold text-4xl">Rp {{ number_format($jumlahIuranTersisa, 0, ',', '.') }}</h1>
-
+                    <p class="font-bold">Sisa Iuran</p>
     </section>
+    <div class="mt-8 bg-white rounded-lg shadow p-6">
+    <h2 class="text-lg font-bold mb-4">Detail Pengeluaran</h2>
+    <div class="overflow-x-auto">
+        <table class="min-w-full border text-sm">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="py-2 px-4 border">ID Pengeluaran</th>
+                    <th class="py-2 px-4 border">Jenis Pengeluaran</th>
+                    <th class="py-2 px-4 border">Jumlah Pengeluaran</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($pengeluarans as $pengeluaran)
+                    <tr>
+                        <td class="py-2 px-4 border">#{{ $pengeluaran->id }}</td>
+                        <td class="py-2 px-4 border">{{ $pengeluaran->description}}</td>
+                        <td class="py-2 px-4 border">Rp {{ number_format($pengeluaran->amount, 0, ',', '.') }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="3" class="py-2 px-4 border text-center text-gray-500">Belum ada data pengeluaran.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
 </main>
 
 @endsection
