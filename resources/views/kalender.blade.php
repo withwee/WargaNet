@@ -3,44 +3,104 @@
 @section('title', 'Kalender')
 
 @section('content')
-<div class="bg-white p-6 rounded shadow">
-    <h2 class="text-xl font-semibold text-blue-600 mb-4">Juni, 2025</h2>
-
-    @php
-        $daysInMonth = 30;
-        $startDay = 6; // 1 Juni 2025 jatuh pada Minggu (0=Senin, jadi Minggu=6)
-        $weeks = ceil(($daysInMonth + $startDay) / 7);
+ @php
+        $prevMonth = $currentDate->copy()->subMonth();
+        $nextMonth = $currentDate->copy()->addMonth();
+        $startOfMonth = $currentDate->copy()->startOfMonth();
+        $endOfMonth = $currentDate->copy()->endOfMonth();
+        $startDayOfWeek = $startOfMonth->dayOfWeekIso;
+        $daysInMonth = $currentDate->daysInMonth;
+        $firstDayInCalendar = $startOfMonth->copy()->subDays($startDayOfWeek - 1);
+        $cellsToDisplay = 42;
+        $lastDayInCalendar = $firstDayInCalendar->copy()->addDays($cellsToDisplay - 1);
     @endphp
 
-    <table class="table-fixed w-full border text-sm">
-        <thead>
-            <tr class="bg-blue-100 text-blue-800 text-center">
-                <th class="w-[14.28%]">Senin</th>
-                <th class="w-[14.28%]">Selasa</th>
-                <th class="w-[14.28%]">Rabu</th>
-                <th class="w-[14.28%]">Kamis</th>
-                <th class="w-[14.28%]">Jumat</th>
-                <th class="w-[14.28%]">Sabtu</th>
-                <th class="w-[14.28%]">Minggu</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for ($week = 0; $week < $weeks; $week++)
-                <tr>
-                    @for ($day = 0; $day < 7; $day++)
-                        @php
-                            $cell = $week * 7 + $day - $startDay + 1;
-                            $date = sprintf('2025-06-%02d', $cell);
-                        @endphp
-                        <td class="border align-top p-1 h-[100px]">
-                            @if ($cell >= 1 && $cell <= $daysInMonth)
-                                <div class="font-semibold text-gray-800 mb-1">{{ $cell }}</div>
-                                @if (isset($events[$date]))
-                                    <div class="text-xs p-1 rounded bg-blue-200 text-left break-words max-h-[60px] overflow-auto">
-                                        <strong>{{ $events[$date]->title }}</strong><br>
-                                        <span class="text-[10px] text-gray-600">{{ $events[$date]->description }}</span>
+  
+{{-- Section: Tampilan Kalender Kegiatan --}}Add commentMore actions
+    <section aria-labelledby="kalender-kegiatan-section-title">
+        <h2 id="kalender-kegiatan-section-title" class="text-2xl font-bold text-gray-800 mb-6">Kalender Kegiatan</h2>
+        <div class="bg-white p-6 rounded-xl shadow space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3">
+                <p class="font-bold text-xl md:text-2xl text-blue-600 order-2 sm:order-1">{{ $currentDate->translatedFormat('F, Y') }}</p>
+                <div class="flex items-center space-x-2 order-1 sm:order-2 self-end sm:self-center">
+                    <a href="{{ route('kalender', ['month' => $prevMonth->month, 'year' => $prevMonth->year]) }}" title="Bulan Sebelumnya" class="text-gray-600 hover:text-blue-600 p-1.5 rounded-md hover:bg-slate-100 transition-colors duration-150">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M15.41 7.41L14 6l-6 6l6 6l1.41-1.41L10.83 12z"/></svg>
+                    </a>
+                    <a href="{{ route('kalender', ['month' => $nextMonth->month, 'year' => $nextMonth->year]) }}" title="Bulan Berikutnya" class="text-gray-600 hover:text-blue-600 p-1.5 rounded-md hover:bg-slate-100 transition-colors duration-150">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M8.59 16.59L10 18l6-6l-6-6l-1.41 1.41L13.17 12z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-7 border-t border-l border-slate-200">
+                @foreach (['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'] as $day)
+                    <div class="p-2.5 border-b border-r border-slate-200 text-center text-xs font-semibold text-gray-500">{{ $day }}</div>
+                @endforeach
+
+                @for ($date = $firstDayInCalendar->copy(); $date <= $lastDayInCalendar; $date->addDay())
+                    @php
+                        $tanggal = $date->toDateString();
+                        $kegiatanHariIni = $kalendars->where('tanggal', $tanggal);
+                        $isCurrentMonth = $date->month === $currentDate->month;
+                        $isToday = $date->isToday();
+
+                        // Logika Pewarnaan
+                        $cellBgColor = '';
+                        $dayNumberTextColor = 'text-gray-700';
+                        $eventDetailsTextColor = 'text-gray-700';
+
+                        if ($isCurrentMonth && $kegiatanHariIni->isNotEmpty()) {
+                            $hasHardcodedColor = false;
+                            // Contoh hardcode dari Figma (bisa dihapus jika tidak perlu)
+                            if ($date->month == 3 && $date->year == 2025) {
+                                if (in_array($date->day, [1, 2])) {
+                                    $cellBgColor = 'bg-pink-100'; $dayNumberTextColor = 'text-pink-800'; $eventDetailsTextColor = 'text-pink-700'; $hasHardcodedColor = true;
+                                } elseif (in_array($date->day, [11, 12])) {
+                                    $cellBgColor = 'bg-green-100'; $dayNumberTextColor = 'text-green-800'; $eventDetailsTextColor = 'text-green-700'; $hasHardcodedColor = true;
+                                } elseif ($date->day == 21) {
+                                    $cellBgColor = 'bg-purple-100'; $dayNumberTextColor = 'text-purple-800'; $eventDetailsTextColor = 'text-purple-700'; $hasHardcodedColor = true;
+                                }
+                            }
+
+                            // Fallback pewarnaan jika tidak ada hardcode di atas
+                            if (!$hasHardcodedColor) {
+                                $colors = [
+                                    ['bg' => 'bg-sky-100',    'day_text' => 'text-sky-800',    'event_text' => 'text-sky-700'],
+                                    ['bg' => 'bg-amber-100',  'day_text' => 'text-amber-800',  'event_text' => 'text-amber-700'],
+                                    ['bg' => 'bg-rose-100',   'day_text' => 'text-rose-800',   'event_text' => 'text-rose-700'],
+                                    ['bg' => 'bg-teal-100',   'day_text' => 'text-teal-800',   'event_text' => 'text-teal-700'],
+                                    ['bg' => 'bg-indigo-100', 'day_text' => 'text-indigo-800', 'event_text' => 'text-indigo-700']
+                                ];
+                                $selectedColor = $colors[$kegiatanHariIni->first()->id % count($colors)];
+                                $cellBgColor = $selectedColor['bg'];
+                                $dayNumberTextColor = $selectedColor['day_text'];
+                                $eventDetailsTextColor = $selectedColor['event_text'];
+                            }
+                        }
+
+                        // Penentuan kelas akhir untuk sel dan angka tanggal
+                        $finalCellClasses = 'border-b border-r border-slate-200 p-2 h-28 sm:h-32 text-left overflow-y-auto relative';
+                        if (!$isCurrentMonth) {
+                            $finalCellClasses .= ' bg-slate-50';
+                            $dayNumberTextColor = 'text-gray-400';
+                        } elseif (!empty($cellBgColor)) {
+                            $finalCellClasses .= ' ' . $cellBgColor;
+                        }
+                        $finalDayNumberColorClass = $isCurrentMonth ? ($isToday ? 'text-blue-600 font-bold' : $dayNumberTextColor) : 'text-gray-400';
+                    @endphp
+
+                    <div class="{{ $finalCellClasses }}">
+                        <span class="font-semibold mb-1 block text-sm {{ $finalDayNumberColorClass }}">{{ $date->day }}</span>
+                        @if ($kegiatanHariIni->isNotEmpty() && $isCurrentMonth)
+                            <div class="mt-1 space-y-1">
+                                @foreach ($kegiatanHariIni as $kegiatan)
+                                    <div class="kegiatan-item cursor-pointer group"
+                                         data-judul="{{ e($kegiatan->judul) }}"
+                                         data-deskripsi="{{ e($kegiatan->deskripsi) }}"
+                                         data-tanggal="{{ \Carbon\Carbon::parse($kegiatan->tanggal)->translatedFormat('l, d F Y') }}">
+                                        <p class="text-base font-semibold {{ $eventDetailsTextColor }} leading-tight group-hover:opacity-75">{{ $kegiatan->judul }}</p>
                                     </div>
-                                @endforeach
+                                @endforeach 
                             </div>
                         @endif
                     </div>

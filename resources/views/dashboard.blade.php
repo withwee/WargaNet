@@ -28,49 +28,63 @@
                 </div>
             
             <div class="space-y-2">
-    <div class="flex justify-between items-center">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4m0 0l6-6m-6 6l6 6"/></svg>
-        <h1>Maret, 2025</h1>
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16m0 0l-6 6m6-6l-6-6"/></svg>
-    </div>
-                {{-- Kalender --}}
-                <div class="bg-white rounded-lg shadow-md p-4 w-80">
-                    <div class="grid grid-cols-7 gap-2 text-gray-500 font-semibold text-xs mb-2">
-                        <div>SUN</div>
-                        <div>MON</div>
-                        <div>TUE</div>
-                        <div>WED</div>
-                        <div>THU</div>
-                        <div>FRI</div>
-                        <div>SAT</div>
+                {{-- Bagian Kalender Dinamis --}}
+                @php
+                    use Carbon\Carbon;
+
+                    $currentDate = Carbon::now(); // bisa juga menggunakan Carbon::parse(request('bulan'))
+                    $month = $currentDate->month;
+                    $year = $currentDate->year;
+                    $daysInMonth = $currentDate->daysInMonth;
+                    $startOfMonth = Carbon::createFromDate($year, $month, 1);
+                    $startDay = $startOfMonth->dayOfWeek; // 0 = Sunday
+
+                    // Membuat array kosong sesuai dengan hari pertama
+                    $calendar = array_fill(0, $startDay, '');
+
+                    // Tambahkan tanggal ke array kalender
+                    for ($i = 1; $i <= $daysInMonth; $i++) {
+                        $calendar[] = $i;
+                    }
+
+                    $monthName = $currentDate->translatedFormat('F');
+                @endphp
+
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        {{-- Tombol Navigasi bulan bisa ditambahkan logika --}}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4m0 0l6-6m-6 6l6 6"/></svg>
+                        <h1>{{ $monthName }}, {{ $year }}</h1>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16m0 0l-6 6m6-6l-6-6"/></svg>
                     </div>
-                    <div class="grid grid-cols-7 gap-2 text-center text-gray-700 text-sm">
-                        @php
-                            $days = [
-                                1,2,3,4,5,6,7,
-                                8,9,10,11,12,13,14,
-                                15,16,17,18,19,20,21,
-                                22,23,24,25,26,27,28,
-                                29,30,31
-                            ];
-                        @endphp
-                
-                        @foreach ($days as $day)
-                            @if ($day == '')
-                                <div></div>
-                            @elseif ($day == 1)
-                                <div class="bg-red-200 rounded-md py-1 font-bold">{{ $day }}</div>
-                            @elseif ($day == 11)
-                                <div class="bg-green-200 rounded-md py-1 font-bold">{{ $day }}</div>
-                            @elseif ($day == 21)
-                                <div class="bg-purple-200 rounded-md py-1 font-bold">{{ $day }}</div>
-                            @else
-                                <div class="py-1">{{ $day }}</div>
-                            @endif
-                        @endforeach
+
+                    <div class="bg-white rounded-lg shadow-md p-4 w-80">
+                        <div class="grid grid-cols-7 gap-2 text-gray-500 font-semibold text-xs mb-2">
+                            <div>MIN</div>
+                            <div>SEN</div>
+                            <div>SEL</div>
+                            <div>RAB</div>
+                            <div>KAM</div>
+                            <div>JUM</div>
+                            <div>SAB</div>
+                        </div>
+                        <div class="grid grid-cols-7 gap-2 text-center text-gray-700 text-sm">
+                            @foreach ($calendar as $day)
+                                @if ($day == '')
+                                    <div></div>
+                                @elseif (isset($events[$day]))
+                                    {{-- Tanggal dengan event --}}
+                                    <div class="bg-yellow-300 text-white rounded-full font-bold py-1 hover:scale-105 transition-all" title="{{ $events[$day]->title }}">
+                                        {{ $day }}
+                                    </div>
+                                @else
+                                    {{-- Tanggal biasa --}}
+                                    <div class="py-1">{{ $day }}</div>
+                                @endif
+                            @endforeach
+                        </div>
                     </div>
                 </div>
-            </div>
             </div>
         </div>
 

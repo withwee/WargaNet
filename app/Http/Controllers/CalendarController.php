@@ -7,19 +7,31 @@ use App\Models\Event;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class CalendarController extends Controller
 {
     public function index()
 {
-    $events = Event::whereMonth('event_date', 6) // Juni
-                   ->whereYear('event_date', 2025)
-                   ->get()
-                   ->keyBy(function ($event) {
-                       return \Carbon\Carbon::parse($event->event_date)->format('Y-m-d');
-                   });
+    $currentDate = Carbon::now();
+    $month = $currentDate->month;
+    $year = $currentDate->year;
 
-    return view('kalender', compact('events'));
+    $eventsRaw = Event::whereMonth('date', $month)
+                      ->whereYear('date', $year)
+                      ->get();
+
+    // Ubah ke format: [tanggal => [title]]
+    $events = [];
+    foreach ($eventsRaw as $event) {
+        $day = Carbon::parse($event->date)->day;
+        $events[$day] = $event->title;
+    }
+
+    return view('dashboard', [
+        'currentDate' => $currentDate,
+        'events' => $events
+    ]);
 }
 
 
