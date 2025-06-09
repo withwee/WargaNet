@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use App\Models\Kegiatan;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -158,7 +159,7 @@ class UserController extends Controller
         return redirect()->route('home')->with('message', 'Logout berhasil');
     }
 
-    public function dashboard()
+    public function dashboard(Request $request)
     {
         try {
             $token = session('jwt_token');
@@ -175,11 +176,39 @@ class UserController extends Controller
             return redirect()->route('login.view')->withErrors(['error' => 'Token tidak valid atau kedaluwarsa']);
         }
 
-        if ($user->role === 'admin') {
-            return view('admin.dashboardAdmin', compact('user'));
+        // Get month and year from request or use current
+        $year = $request->input('year', now()->year);
+        $month = $request->input('month', now()->month);
+        
+        // Validate month and year
+        $year = max(2020, min(2100, (int)$year));
+        $month = max(1, min(12, (int)$month));
+        
+        $currentDate = \Carbon\Carbon::createFromDate($year, $month, 1);
+
+        // Get kegiatan for the selected month
+        $kegiatans = \App\Models\Kegiatan::whereYear('tanggal', '=', $year)
+                        ->whereMonth('tanggal', '=', $month)
+                        ->orderBy('tanggal')
+                        ->get();
+
+        // Format events as [day => kegiatan]
+        $events = [];
+        foreach ($kegiatans as $kegiatan) {
+            $eventDate = \Carbon\Carbon::parse($kegiatan->tanggal);
+            $day = $eventDate->day;
+            $events[$day] = (object)[
+                'title' => $kegiatan->nama_kegiatan,
+                'description' => $kegiatan->keterangan,
+                'date' => $kegiatan->tanggal
+            ];
         }
 
-        return view('dashboard', compact('user'));
+        if ($user->role === 'admin') {
+            return view('admin.dashboardAdmin', compact('user', 'events'));
+        }
+
+        return view('dashboard', compact('user', 'events'));
     }
 
     // PENGUMUMAN (user & admin)

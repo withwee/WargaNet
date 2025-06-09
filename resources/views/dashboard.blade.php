@@ -28,34 +28,60 @@
                 </div>
             
             <div class="space-y-2">
-                {{-- Bagian Kalender Dinamis --}}
+                    {{-- Bagian Kalender Dinamis --}}
                 @php
                     use Carbon\Carbon;
-
-                    $currentDate = Carbon::now(); // bisa juga menggunakan Carbon::parse(request('bulan'))
-                    $month = $currentDate->month;
-                    $year = $currentDate->year;
-                    $daysInMonth = $currentDate->daysInMonth;
-                    $startOfMonth = Carbon::createFromDate($year, $month, 1);
-                    $startDay = $startOfMonth->dayOfWeek; // 0 = Sunday
-
-                    // Membuat array kosong sesuai dengan hari pertama
-                    $calendar = array_fill(0, $startDay, '');
-
-                    // Tambahkan tanggal ke array kalender
-                    for ($i = 1; $i <= $daysInMonth; $i++) {
-                        $calendar[] = $i;
-                    }
-
+                    
+                    // Get current date and navigation parameters
+                    $today = Carbon::today();
+                    $year = request('year', $today->year);
+                    $month = request('month', $today->month);
+                    
+                    // Create Carbon instance for the current month being viewed
+                    $currentDate = Carbon::createFromDate($year, $month, 1);
                     $monthName = $currentDate->translatedFormat('F');
+                    
+                    // Calculate previous and next month for navigation
+                    $prevMonth = (clone $currentDate)->subMonth();
+                    $nextMonth = (clone $currentDate)->addMonth();
+                    
+                    // Get calendar data
+                    $daysInMonth = $currentDate->daysInMonth;
+                    $startOfMonth = (clone $currentDate)->startOfMonth();
+                    $startDay = $startOfMonth->dayOfWeek; // 0 = Sunday
+                    
+                    // Create calendar grid
+                    $calendar = [];
+                    // Add empty cells for days before the 1st of the month
+                    $calendar = array_fill(0, $startDay, '');
+                    
+                    // Add days of the month
+                    for ($day = 1; $day <= $daysInMonth; $day++) {
+                        $date = Carbon::createFromDate($year, $month, $day);
+                        $hasEvent = isset($events[$day]);
+                        $calendar[] = [
+                            'day' => $day,
+                            'date' => $date,
+                            'has_event' => $hasEvent,
+                            'is_today' => $date->isToday(),
+                            'event' => $hasEvent ? $events[$day] : null
+                        ];
+                    }
                 @endphp
 
                 <div class="space-y-2">
                     <div class="flex justify-between items-center">
-                        {{-- Tombol Navigasi bulan bisa ditambahkan logika --}}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4m0 0l6-6m-6 6l6 6"/></svg>
-                        <h1>{{ $monthName }}, {{ $year }}</h1>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16m0 0l-6 6m6-6l-6-6"/></svg>
+                        <a href="?year={{ $prevMonth->year }}&month={{ $prevMonth->month }}" class="p-1 hover:bg-gray-100 rounded">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4m0 0l6-6m-6 6l6 6"/>
+                            </svg>
+                        </a>
+                        <h1 class="font-medium">{{ $monthName }} {{ $year }}</h1>
+                        <a href="?year={{ $nextMonth->year }}&month={{ $nextMonth->month }}" class="p-1 hover:bg-gray-100 rounded">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16m0 0l-6-6m6 6l-6 6"/>
+                            </svg>
+                        </a>
                     </div>
 
                     <div class="bg-white rounded-lg shadow-md p-4 w-80">
@@ -69,17 +95,36 @@
                             <div>SAB</div>
                         </div>
                         <div class="grid grid-cols-7 gap-2 text-center text-gray-700 text-sm">
-                            @foreach ($calendar as $day)
-                                @if ($day == '')
+                            @foreach ($calendar as $date)
+                                @if ($date === '')
                                     <div></div>
-                                @elseif (isset($events[$day]))
-                                    {{-- Tanggal dengan event --}}
-                                    <div class="bg-yellow-300 text-white rounded-full font-bold py-1 hover:scale-105 transition-all" title="{{ $events[$day]->title }}">
+                                @else
+                                    @php
+                                        $day = $date['day'];
+                                        $hasEvent = $date['has_event'];
+                                        $isToday = $date['is_today'];
+                                        $event = $date['event'];
+                                        
+                                        $baseClasses = 'rounded-full py-1 transition-all';
+                                        
+                                        if ($isToday && $hasEvent) {
+                                            $classes = "bg-blue-500 text-white font-bold hover:scale-105 cursor-pointer";
+                                            $title = $event ? $event->title . "\n" . ($event->description ?? '') : '';
+                                        } elseif ($hasEvent) {
+                                            $classes = "bg-yellow-300 font-bold hover:scale-105 cursor-pointer";
+                                            $title = $event ? $event->title . "\n" . ($event->description ?? '') : '';
+                                        } elseif ($isToday) {
+                                            $classes = "bg-blue-100";
+                                            $title = '';
+                                        } else {
+                                            $classes = "";
+                                            $title = '';
+                                        }
+                                    @endphp
+                                    <div class="{{ $baseClasses }} {{ $classes }}" 
+                                         @if($title) title="{{ $title }}" @endif>
                                         {{ $day }}
                                     </div>
-                                @else
-                                    {{-- Tanggal biasa --}}
-                                    <div class="py-1">{{ $day }}</div>
                                 @endif
                             @endforeach
                         </div>
