@@ -100,7 +100,7 @@ class UserController extends Controller
             ],
         ]);
 
-        return redirect()->route('admin.dashboard')->with('message', 'Login berhasil');
+        return redirect()->route('admin.dashboardAdmin')->with('message', 'Login berhasil');
     }
 
     // USER LOGIN
@@ -118,21 +118,6 @@ class UserController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-        }
-
-        if (User::count() == 0) {
-            User::create([
-                'name'     => 'dummyUsers',
-                'email'    => 'dummy@gmail.com',
-                'password' => Hash::make('password123'),
-                'nik'      => '1234567890123457',
-                'no_kk'    => '1234567890123456',
-                'phone'    => '08123456789',
-                'photo'    => null,
-                'jumlah_LK' => 1,
-                'jumlah_PR' => 0,
-                'role' => 'user'
-            ]);
         }
 
         $user = User::where('nik', $request->nik)->first();
@@ -153,7 +138,7 @@ class UserController extends Controller
             ],
         ]);
 
-        return redirect()->route('pengumuman')->with('message', 'Login berhasil');
+        return redirect()->route('dashboard')->with('message', 'Login berhasil');
     }
 
     // LOGOUT
@@ -190,11 +175,11 @@ class UserController extends Controller
             return redirect()->route('login.view')->withErrors(['error' => 'Token tidak valid atau kedaluwarsa']);
         }
 
-        if (auth()->user()->role === 'admin') {
-            return redirect()->route('admin.dashboard');
+        if ($user->role === 'admin') {
+            return view('admin.dashboardAdmin', compact('user'));
         }
-    
-        return view('user.dashboard'); // atau view('dashboard')
+
+        return view('dashboard', compact('user'));
     }
 
     // PENGUMUMAN (user & admin)

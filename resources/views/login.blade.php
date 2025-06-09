@@ -5,6 +5,10 @@
 @section('content')
 
 <div class="flex flex-col w-full mt-8 space-y-6">
+     <div class="flex items-center justify-center gap-0.5 text-5xl text-[#2C79FF]">
+        <h1 class="font-extrabold">Warga</h1>
+        <h1>Net</h1>
+      </div>
     <form action="{{ route('login') }}" method="POST" class="space-y-4 w-full" onsubmit="return validateForm();">
         @csrf
 
