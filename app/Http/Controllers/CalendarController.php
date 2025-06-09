@@ -12,14 +12,16 @@ class CalendarController extends Controller
 {
     public function index()
 {
-    // contoh data dummy jika belum ada dari database
-    $events = [
-        ['date' => '2025-03-01', 'title' => 'Kerja Bakti'],
-        ['date' => '2025-03-15', 'title' => 'Ulang Tahun Cipeng'],
-    ];
+    $events = Event::whereMonth('event_date', 6) // Juni
+                   ->whereYear('event_date', 2025)
+                   ->get()
+                   ->keyBy(function ($event) {
+                       return \Carbon\Carbon::parse($event->event_date)->format('Y-m-d');
+                   });
 
     return view('kalender', compact('events'));
 }
+
 
     public function adminIndex()
     {
