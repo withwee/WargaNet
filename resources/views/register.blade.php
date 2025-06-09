@@ -4,8 +4,12 @@
 
 @section('content')
 
-<div class="flex flex-col w-full mt-8 space-y-6">
-    <form action="{{ route('register.submit') }}" method="POST" class="space-y-4 w-full" id="registerForm">
+<div class="flex flex-col w-full scale-90 h-full gap-2">
+    <div class="flex items-center justify-center gap-0.5 text-5xl text-[#2C79FF]">
+        <h1 class="font-extrabold">Warga</h1>
+        <h1>Net</h1>
+      </div>
+    <form action="{{ route('register.submit') }}" method="POST" class="space-y-2 w-full h-full" id="registerForm">
         @csrf
 
         {{-- Nama Lengkap --}}
@@ -198,12 +202,12 @@
             class="bg-blue-600 hover:bg-blue-700 transition-colors text-white font-semibold px-4 py-3 rounded-lg w-full">
             Daftar
         </button>
+        <div class="text-center">
+            <p class="mt-4 text-sm text-gray-700">Sudah punya akun?</p>
+            <a href="{{ route('login') }}" class="text-blue-500 font-bold hover:underline">Masuk di sini</a>
+        </div>
     </form>
 
-    <div class="text-center">
-        <p class="mt-4 text-sm text-gray-700">Sudah punya akun?</p>
-        <a href="{{ route('login') }}" class="text-blue-500 font-bold hover:underline">Masuk di sini</a>
-    </div>
 </div>
 
 <script>

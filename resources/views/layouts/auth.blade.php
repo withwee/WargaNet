@@ -17,7 +17,7 @@
 </head>
 
 <body>
-<main class="h-screen w-full flex items-center justify-end"
+<main class="h-auto w-full flex items-center justify-end"
       style="
         background-image: 
           linear-gradient(to bottom, rgba(44,121,255,0.2) 0%, rgba(44,121,255,0.35) 60%, rgba(44,121,255,0.5) 100%),
@@ -70,13 +70,7 @@
   <!-- Area Form Login / Register -->
   <div class="bg-white h-screen items-center justify-center flex flex-col w-full">
 
-    <div class="w-96">
-      <!-- Logo Aplikasi -->
-      <div class="flex items-center justify-center gap-0.5 text-5xl text-[#2C79FF]">
-        <h1 class="font-extrabold">Warga</h1>
-        <h1>Net</h1>
-      </div>
-
+    <div class="w-96 h-fit">
       <!-- Slot untuk konten Login/Register -->
       @yield('content')
     </div>
