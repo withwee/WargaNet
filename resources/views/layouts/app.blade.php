@@ -47,7 +47,7 @@
                     </a>
                 @php
                     $notifCount = 0;
-                    $notifList = \App\Models\Notification::where('user_id', auth()->id())->latest()->take(5)->get();
+                    $notifList = \App\Models\notification::where('user_id', auth()->id())->latest()->take(5)->get();
                 @endphp
                 <div 
                     x-data="{

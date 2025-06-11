@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Iuran;
 use App\Models\Kegiatan;
+use App\Models\Pengeluaran;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Pengumuman;
@@ -100,7 +102,7 @@ class UserController extends Controller
             ],
         ]);
 
-        return redirect()->route('admin.dashboard')->with('message', 'Login berhasil');
+        return redirect()->route('admin.dashboardAdmin')->with('message', 'Login berhasil');
     }
 
     // USER LOGIN
@@ -118,21 +120,6 @@ class UserController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-        }
-
-        if (User::count() == 0) {
-            User::create([
-                'name'     => 'dummyUsers',
-                'email'    => 'dummy@gmail.com',
-                'password' => Hash::make('password123'),
-                'nik'      => '1234567890123457',
-                'no_kk'    => '1234567890123456',
-                'phone'    => '08123456789',
-                'photo'    => null,
-                'jumlah_LK' => 1,
-                'jumlah_PR' => 0,
-                'role' => 'user'
-            ]);
         }
 
         $user = User::where('nik', $request->nik)->first();
@@ -173,29 +160,47 @@ class UserController extends Controller
         return redirect()->route('home')->with('message', 'Logout berhasil');
     }
 
-    public function dashboard()
-    {
-        try {
-            $token = session('jwt_token');
-            if (!$token) {
-                return redirect()->route('login.view')->withErrors(['error' => 'Token tidak tersedia']);
-            }
-
-            $user = JWTAuth::setToken($token)->authenticate();
-            if (!$user) {
-                return redirect()->route('login.view')->withErrors(['error' => 'User tidak ditemukan']);
-            }
-
-        } catch (TokenInvalidException | TokenExpiredException | JWTException $e) {
-            return redirect()->route('login.view')->withErrors(['error' => 'Token tidak valid atau kedaluwarsa']);
+   public function dashboard(Request $request)
+{
+    try {
+        $token = session('jwt_token');
+        if (!$token) {
+            return redirect()->route('login.view')->withErrors(['error' => 'Token tidak tersedia']);
         }
 
-        if (auth()->user()->role === 'admin') {
-            return redirect()->route('admin.dashboard');
+        $user = JWTAuth::setToken($token)->authenticate();
+        if (!$user) {
+            return redirect()->route('login.view')->withErrors(['error' => 'User tidak ditemukan']);
         }
-    
-        return view('dashboard');
+    } catch (TokenInvalidException | TokenExpiredException | JWTException $e) {
+        return redirect()->route('login.view')->withErrors(['error' => 'Token tidak valid atau kedaluwarsa']);
     }
+
+    if ($user->role === 'admin') {
+        return view('admin.dashboardAdmin', compact('user'));
+    }
+
+    // ✅ Ambil year & month dari query string, fallback ke sekarang
+    $year = $request->input('year', now()->year);
+    $month = $request->input('month', now()->month);
+    $totalIuran = Iuran::sum('total_bayar');
+    $totalPengeluaran = Pengeluaran::sum('amount'); 
+    $pengumumanTerbaru = Pengumuman::latest()->first();
+    $kalenderKegiatan = Kegiatan::whereMonth('tanggal', $month)
+                                ->whereYear('tanggal', $year)
+                                ->get();
+    $jumlahIuran = Iuran::count();
+    $jumlahKK = User::distinct('no_kk')->count('no_kk');
+    $totalLakiLaki = User::sum('jumlah_LK');
+    $totalPerempuan = User::sum('jumlah_PR');
+    $totalWarga = $totalLakiLaki + $totalPerempuan;
+
+    return view('dashboard', compact(
+        'user', 'kalenderKegiatan', 'year', 'month',
+        'totalIuran', 'totalPengeluaran', 'pengumumanTerbaru',
+        'jumlahIuran',"totalLakiLaki", "totalPerempuan","totalWarga", 'jumlahKK'
+    ));
+}
 
     // PENGUMUMAN (user & admin)
     public function pengumuman()

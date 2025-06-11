@@ -9,7 +9,6 @@ use App\Models\User;
 use App\Models\Pengumuman;
 use App\Models\Kegiatan;
 
-
 class AdminController extends Controller
 {
     public function dashboard()
@@ -20,7 +19,7 @@ class AdminController extends Controller
     $jumlahAcara = Kegiatan::count();
     $jumlahIuran = Iuran::count();
     $jumlahIuranTersisa = $totalIuran - $totalPengeluaran;
-    $pengeluarans = \App\Models\Pengeluaran::latest()->get();
+    $pengeluarans = Pengeluaran::latest()->get();
 
     return view('admin.dashboardAdmin', compact('totalIuran', 'totalPengeluaran', 'jumlahPengumuman', 'jumlahAcara', 'jumlahIuran', 'jumlahIuranTersisa', 'pengeluarans'));
 }
@@ -36,6 +35,6 @@ class AdminController extends Controller
             'amount' => $request->amount,
         ]);
 
-        return redirect()->route('admin.dashboard')->with('success', 'Pengeluaran berhasil ditambahkan.');
+        return redirect()->route('admin.dashboardAdmin')->with('success', 'Pengeluaran berhasil ditambahkan.');
     }
 }
