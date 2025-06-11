@@ -35,6 +35,6 @@ class AdminController extends Controller
             'amount' => $request->amount,
         ]);
 
-        return redirect()->route('admin.dashboard')->with('success', 'Pengeluaran berhasil ditambahkan.');
+        return redirect()->route('admin.dashboardAdmin')->with('success', 'Pengeluaran berhasil ditambahkan.');
     }
 }

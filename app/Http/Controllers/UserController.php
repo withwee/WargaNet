@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Event;
+use App\Models\Iuran;
 use App\Models\Kegiatan;
+use App\Models\Pengeluaran;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Pengumuman;
@@ -159,57 +160,47 @@ class UserController extends Controller
         return redirect()->route('home')->with('message', 'Logout berhasil');
     }
 
-    public function dashboard(Request $request)
-    {
-        try {
-            $token = session('jwt_token');
-            if (!$token) {
-                return redirect()->route('login.view')->withErrors(['error' => 'Token tidak tersedia']);
-            }
-
-            $user = JWTAuth::setToken($token)->authenticate();
-            if (!$user) {
-                return redirect()->route('login.view')->withErrors(['error' => 'User tidak ditemukan']);
-            }
-
-        } catch (TokenInvalidException | TokenExpiredException | JWTException $e) {
-            return redirect()->route('login.view')->withErrors(['error' => 'Token tidak valid atau kedaluwarsa']);
+   public function dashboard(Request $request)
+{
+    try {
+        $token = session('jwt_token');
+        if (!$token) {
+            return redirect()->route('login.view')->withErrors(['error' => 'Token tidak tersedia']);
         }
 
-        // Get month and year from request or use current
-        $year = $request->input('year', now()->year);
-        $month = $request->input('month', now()->month);
-        
-        // Validate month and year
-        $year = max(2020, min(2100, (int)$year));
-        $month = max(1, min(12, (int)$month));
-        
-        $currentDate = \Carbon\Carbon::createFromDate($year, $month, 1);
-
-        // Get kegiatan for the selected month
-        $kegiatans = \App\Models\Kegiatan::whereYear('tanggal', '=', $year)
-                        ->whereMonth('tanggal', '=', $month)
-                        ->orderBy('tanggal')
-                        ->get();
-
-        // Format events as [day => kegiatan]
-        $events = [];
-        foreach ($kegiatans as $kegiatan) {
-            $eventDate = \Carbon\Carbon::parse($kegiatan->tanggal);
-            $day = $eventDate->day;
-            $events[$day] = (object)[
-                'title' => $kegiatan->nama_kegiatan,
-                'description' => $kegiatan->keterangan,
-                'date' => $kegiatan->tanggal
-            ];
+        $user = JWTAuth::setToken($token)->authenticate();
+        if (!$user) {
+            return redirect()->route('login.view')->withErrors(['error' => 'User tidak ditemukan']);
         }
-
-        if ($user->role === 'admin') {
-            return view('admin.dashboardAdmin', compact('user', 'events'));
-        }
-
-        return view('dashboard', compact('user', 'events'));
+    } catch (TokenInvalidException | TokenExpiredException | JWTException $e) {
+        return redirect()->route('login.view')->withErrors(['error' => 'Token tidak valid atau kedaluwarsa']);
     }
+
+    if ($user->role === 'admin') {
+        return view('admin.dashboardAdmin', compact('user'));
+    }
+
+    // ✅ Ambil year & month dari query string, fallback ke sekarang
+    $year = $request->input('year', now()->year);
+    $month = $request->input('month', now()->month);
+    $totalIuran = Iuran::sum('total_bayar');
+    $totalPengeluaran = Pengeluaran::sum('amount'); 
+    $pengumumanTerbaru = Pengumuman::latest()->first();
+    $kalenderKegiatan = Kegiatan::whereMonth('tanggal', $month)
+                                ->whereYear('tanggal', $year)
+                                ->get();
+    $jumlahIuran = Iuran::count();
+    $jumlahKK = User::distinct('no_kk')->count('no_kk');
+    $totalLakiLaki = User::sum('jumlah_LK');
+    $totalPerempuan = User::sum('jumlah_PR');
+    $totalWarga = $totalLakiLaki + $totalPerempuan;
+
+    return view('dashboard', compact(
+        'user', 'kalenderKegiatan', 'year', 'month',
+        'totalIuran', 'totalPengeluaran', 'pengumumanTerbaru',
+        'jumlahIuran',"totalLakiLaki", "totalPerempuan","totalWarga", 'jumlahKK'
+    ));
+}
 
     // PENGUMUMAN (user & admin)
     public function pengumuman()

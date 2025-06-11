@@ -65,7 +65,7 @@ class PengumumanController extends Controller
         // Kirim notifikasi ke semua user (kecuali admin)
         $users = \App\Models\User::where('role', '!=', 'admin')->get();
         foreach ($users as $user) {
-            \App\Models\Notification::create([
+            \App\Models\notification::create([
                 'user_id' => $user->id,
                 'type' => 'pengumuman',
                 'message' => 'Ada pengumuman baru: ' . $pengumuman->judulPengumuman,

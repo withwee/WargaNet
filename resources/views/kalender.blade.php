@@ -3,7 +3,8 @@
 @section('title', 'Kalender')
 
 @section('content')
- @php
+
+   @php
         $prevMonth = $currentDate->copy()->subMonth();
         $nextMonth = $currentDate->copy()->addMonth();
         $startOfMonth = $currentDate->copy()->startOfMonth();
@@ -15,8 +16,7 @@
         $lastDayInCalendar = $firstDayInCalendar->copy()->addDays($cellsToDisplay - 1);
     @endphp
 
-  
-{{-- Section: Tampilan Kalender Kegiatan --}}Add commentMore actions
+    {{-- Section: Tampilan Kalender Kegiatan --}}
     <section aria-labelledby="kalender-kegiatan-section-title">
         <h2 id="kalender-kegiatan-section-title" class="text-2xl font-bold text-gray-800 mb-6">Kalender Kegiatan</h2>
         <div class="bg-white p-6 rounded-xl shadow space-y-6">
@@ -100,7 +100,7 @@
                                          data-tanggal="{{ \Carbon\Carbon::parse($kegiatan->tanggal)->translatedFormat('l, d F Y') }}">
                                         <p class="text-base font-semibold {{ $eventDetailsTextColor }} leading-tight group-hover:opacity-75">{{ $kegiatan->judul }}</p>
                                     </div>
-                                @endforeach 
+                                @endforeach
                             </div>
                         @endif
                     </div>
