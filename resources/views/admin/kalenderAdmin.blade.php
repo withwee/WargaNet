@@ -3,31 +3,45 @@
 
 <div class="max-w-screen space-y-8">
 
-    {{-- Section: Form Pembuatan Kegiatan --}}
-    <h2 id="buat-kegiatan-heading" class="text-2xl font-bold text-gray-800 mb-4">Buat Kegiatan</h2>
+    @if (session('success'))
+        <div class="bg-green-100 text-green-800 border border-green-300 px-4 py-3 rounded-xl">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Buat Kegiatan</h2>
+
     <div class="bg-white p-6 rounded-xl shadow space-y-6">
         <form method="POST" action="{{ route('kegiatan.store') }}" class="space-y-4" id="formKegiatan">
             @csrf
+
             <div>
                 <label for="judulKegiatan" class="block text-base font-semibold mb-1 text-gray-700">Judul Kegiatan</label>
-                <input type="text" name="judulKegiatan" id="judulKegiatan" minlength="5"
-                       placeholder="Ketik judul kegiatan yang mau dibuat di sini ..."
-                       class="w-full border border-gray-300 rounded-full px-5 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 placeholder-gray-400" required>
+                <input type="text" name="judulKegiatan" id="judulKegiatan" minlength="5" required
+                       placeholder="Ketik judul kegiatan ..."
+                       class="w-full border border-gray-300 rounded-full px-5 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 placeholder-gray-400">
             </div>
+
             <div>
                 <label for="deskripsiKegiatan" class="block text-base font-semibold mb-1 text-gray-700">Deskripsi Kegiatan</label>
-                <textarea name="deskripsiKegiatan" id="deskripsiKegiatan" minlength="10"
-                          placeholder="Ketik deskripsi kegiatan yang mau dibuat di sini ..."
-                          class="w-full border border-gray-300 rounded-2xl px-5 py-3 h-40 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 placeholder-gray-400" required></textarea>
+                <textarea name="deskripsiKegiatan" id="deskripsiKegiatan" minlength="10" required
+                          placeholder="Ketik deskripsi kegiatan ..."
+                          class="w-full border border-gray-300 rounded-2xl px-5 py-3 h-40 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 placeholder-gray-400"></textarea>
             </div>
+
             <div>
                 <label for="tanggalKegiatan" class="block text-base font-semibold mb-1 text-gray-700">Tanggal Kegiatan</label>
-                <input type="date" name="tanggalKegiatan" id="tanggalKegiatan"
-                       placeholder=".... / .... / ......"
-                       class="w-full border border-gray-300 rounded-full px-5 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 placeholder-gray-400" required>
+                <input type="date" name="tanggalKegiatan" id="tanggalKegiatan" required
+                       class="w-full border border-gray-300 rounded-full px-5 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 placeholder-gray-400">
+                <p id="tanggalError" class="text-red-600 text-sm mt-1 hidden">Tanggal kegiatan tidak boleh sebelum hari ini.</p>
             </div>
+
             <div class="text-center">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-12 py-3 rounded-full transition duration-300 cursor-pointer">Publikasikan</button>
+                <button type="submit" id="btnPublikasikan"
+                        class="bg-gray-400 text-white font-semibold px-12 py-3 rounded-full transition duration-300 cursor-not-allowed"
+                        disabled>
+                    Publikasikan
+                </button>
             </div>
         </form>
     </div>
@@ -44,18 +58,21 @@
         $lastDayInCalendar = $firstDayInCalendar->copy()->addDays($cellsToDisplay - 1);
     @endphp
 
-    {{-- Section: Tampilan Kalender Kegiatan --}}
     <section aria-labelledby="kalender-kegiatan-section-title">
         <h2 id="kalender-kegiatan-section-title" class="text-2xl font-bold text-gray-800 mb-6">Kalender Kegiatan</h2>
         <div class="bg-white p-6 rounded-xl shadow space-y-6">
             <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3">
                 <p class="font-bold text-xl md:text-2xl text-blue-600 order-2 sm:order-1">{{ $currentDate->translatedFormat('F, Y') }}</p>
                 <div class="flex items-center space-x-2 order-1 sm:order-2 self-end sm:self-center">
-                    <a href="{{ route('kalender', ['month' => $prevMonth->month, 'year' => $prevMonth->year]) }}" title="Bulan Sebelumnya" class="text-gray-600 hover:text-blue-600 p-1.5 rounded-md hover:bg-slate-100 transition-colors duration-150">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M15.41 7.41L14 6l-6 6l6 6l1.41-1.41L10.83 12z"/></svg>
+                    <a href="{{ route('kalender', ['month' => $prevMonth->month, 'year' => $prevMonth->year]) }}"
+                       title="Bulan Sebelumnya"
+                       class="text-gray-600 hover:text-blue-600 p-1.5 rounded-md hover:bg-slate-100 transition-colors duration-150">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path fill="currentColor" d="M15.41 7.41L14 6l-6 6l6 6l1.41-1.41L10.83 12z"/></svg>
                     </a>
-                    <a href="{{ route('kalender', ['month' => $nextMonth->month, 'year' => $nextMonth->year]) }}" title="Bulan Berikutnya" class="text-gray-600 hover:text-blue-600 p-1.5 rounded-md hover:bg-slate-100 transition-colors duration-150">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M8.59 16.59L10 18l6-6l-6-6l-1.41 1.41L13.17 12z"/></svg>
+                    <a href="{{ route('kalender', ['month' => $nextMonth->month, 'year' => $nextMonth->year]) }}"
+                       title="Bulan Berikutnya"
+                       class="text-gray-600 hover:text-blue-600 p-1.5 rounded-md hover:bg-slate-100 transition-colors duration-150">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path fill="currentColor" d="M8.59 16.59L10 18l6-6l-6-6l-1.41 1.41L13.17 12z"/></svg>
                     </a>
                 </div>
             </div>
@@ -72,41 +89,24 @@
                         $isCurrentMonth = $date->month === $currentDate->month;
                         $isToday = $date->isToday();
 
-                        // Logika Pewarnaan
                         $cellBgColor = '';
                         $dayNumberTextColor = 'text-gray-700';
                         $eventDetailsTextColor = 'text-gray-700';
 
                         if ($isCurrentMonth && $kegiatanHariIni->isNotEmpty()) {
-                            $hasHardcodedColor = false;
-                            // Contoh hardcode dari Figma (bisa dihapus jika tidak perlu)
-                            if ($date->month == 3 && $date->year == 2025) {
-                                if (in_array($date->day, [1, 2])) {
-                                    $cellBgColor = 'bg-pink-100'; $dayNumberTextColor = 'text-pink-800'; $eventDetailsTextColor = 'text-pink-700'; $hasHardcodedColor = true;
-                                } elseif (in_array($date->day, [11, 12])) {
-                                    $cellBgColor = 'bg-green-100'; $dayNumberTextColor = 'text-green-800'; $eventDetailsTextColor = 'text-green-700'; $hasHardcodedColor = true;
-                                } elseif ($date->day == 21) {
-                                    $cellBgColor = 'bg-purple-100'; $dayNumberTextColor = 'text-purple-800'; $eventDetailsTextColor = 'text-purple-700'; $hasHardcodedColor = true;
-                                }
-                            }
-
-                            // Fallback pewarnaan jika tidak ada hardcode di atas
-                            if (!$hasHardcodedColor) {
-                                $colors = [
-                                    ['bg' => 'bg-sky-100',    'day_text' => 'text-sky-800',    'event_text' => 'text-sky-700'],
-                                    ['bg' => 'bg-amber-100',  'day_text' => 'text-amber-800',  'event_text' => 'text-amber-700'],
-                                    ['bg' => 'bg-rose-100',   'day_text' => 'text-rose-800',   'event_text' => 'text-rose-700'],
-                                    ['bg' => 'bg-teal-100',   'day_text' => 'text-teal-800',   'event_text' => 'text-teal-700'],
-                                    ['bg' => 'bg-indigo-100', 'day_text' => 'text-indigo-800', 'event_text' => 'text-indigo-700']
-                                ];
-                                $selectedColor = $colors[$kegiatanHariIni->first()->id % count($colors)];
-                                $cellBgColor = $selectedColor['bg'];
-                                $dayNumberTextColor = $selectedColor['day_text'];
-                                $eventDetailsTextColor = $selectedColor['event_text'];
-                            }
+                            $colors = [
+                                ['bg' => 'bg-sky-100', 'day_text' => 'text-sky-800', 'event_text' => 'text-sky-700'],
+                                ['bg' => 'bg-amber-100', 'day_text' => 'text-amber-800', 'event_text' => 'text-amber-700'],
+                                ['bg' => 'bg-rose-100', 'day_text' => 'text-rose-800', 'event_text' => 'text-rose-700'],
+                                ['bg' => 'bg-teal-100', 'day_text' => 'text-teal-800', 'event_text' => 'text-teal-700'],
+                                ['bg' => 'bg-indigo-100', 'day_text' => 'text-indigo-800', 'event_text' => 'text-indigo-700']
+                            ];
+                            $selectedColor = $colors[$kegiatanHariIni->first()->id % count($colors)];
+                            $cellBgColor = $selectedColor['bg'];
+                            $dayNumberTextColor = $selectedColor['day_text'];
+                            $eventDetailsTextColor = $selectedColor['event_text'];
                         }
 
-                        // Penentuan kelas akhir untuk sel dan angka tanggal
                         $finalCellClasses = 'border-b border-r border-slate-200 p-2 h-28 sm:h-32 text-left overflow-y-auto relative';
                         if (!$isCurrentMonth) {
                             $finalCellClasses .= ' bg-slate-50';
@@ -114,22 +114,18 @@
                         } elseif (!empty($cellBgColor)) {
                             $finalCellClasses .= ' ' . $cellBgColor;
                         }
-                        $finalDayNumberColorClass = $isCurrentMonth ? ($isToday ? 'text-blue-600 font-bold' : $dayNumberTextColor) : 'text-gray-400';
                     @endphp
-
                     <div class="{{ $finalCellClasses }}">
-                        <span class="font-semibold mb-1 block text-sm {{ $finalDayNumberColorClass }}">{{ $date->day }}</span>
-                        @if ($kegiatanHariIni->isNotEmpty() && $isCurrentMonth)
-                            <div class="mt-1 space-y-1">
-                                @foreach ($kegiatanHariIni as $kegiatan)
-                                    <div class="kegiatan-item cursor-pointer group"
-                                         data-judul="{{ e($kegiatan->judul) }}"
-                                         data-deskripsi="{{ e($kegiatan->deskripsi) }}"
-                                         data-tanggal="{{ \Carbon\Carbon::parse($kegiatan->tanggal)->translatedFormat('l, d F Y') }}">
-                                        <p class="text-base font-semibold {{ $eventDetailsTextColor }} leading-tight group-hover:opacity-75">{{ $kegiatan->judul }}</p>
-                                    </div>
-                                @endforeach
-                            </div>
+                        <div class="text-sm font-semibold {{ $dayNumberTextColor }}">{{ $date->day }}</div>
+                        @if($isCurrentMonth)
+                            @foreach($kegiatanHariIni as $event)
+                                <div class="kegiatan-item text-xs mt-1 font-medium cursor-pointer hover:underline {{ $eventDetailsTextColor }}"
+                                     data-judul="{{ $event->judul }}"
+                                     data-deskripsi="{{ $event->deskripsi }}"
+                                     data-tanggal="{{ \Carbon\Carbon::parse($event->tanggal)->translatedFormat('l, d F Y') }}">
+                                    • {{ Str::limit($event->judul, 20) }}
+                                </div>
+                            @endforeach
                         @endif
                     </div>
                 @endfor
@@ -138,75 +134,122 @@
     </section>
 </div>
 
-{{-- ===== STRUKTUR MODAL (POP-UP) DENGAN EFEK BLUR (FIXED) ===== --}}
-{{-- Kelas 'flex' dihapus dari sini, akan ditambahkan oleh JavaScript --}}
-<div id="kegiatanModal" class="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm items-center justify-center p-4 hidden z-50">
-    <div id="modalContent" class="bg-white rounded-2xl shadow-2xl w-full max-w-lg transform transition-all">
-        {{-- Header Modal --}}
-        <div class="p-6 border-b border-gray-200">
-            <h3 id="modalJudul" class="text-2xl font-bold text-gray-900">Judul Kegiatan</h3>
-            <p id="modalTanggal" class="mt-1 text-sm text-gray-500">Tanggal Kegiatan</p>
+<div id="kegiatanModal" class="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center p-4 hidden z-50">
+    <div id="modalContent" class="bg-white w-full max-w-2xl rounded-xl shadow-lg transform transition-all duration-300 scale-95 opacity-0">
+        <div class="p-6 space-y-4">
+            <h3 id="modalJudul" class="text-2xl font-bold text-gray-800">Judul Kegiatan</h3>
+            <p id="modalTanggal" class="text-sm font-semibold text-gray-500">Tanggal</p>
+            <div class="border-t border-gray-200 pt-4">
+                <p id="modalDeskripsi" class="text-gray-700 whitespace-pre-wrap">Deskripsi lengkap kegiatan.</p>
+            </div>
         </div>
-        {{-- Body Modal --}}
-        <div class="p-6 max-h-60 overflow-y-auto">
-            <p id="modalDeskripsi" class="text-base text-gray-600 leading-relaxed">Deskripsi lengkap kegiatan...</p>
-        </div>
-        {{-- Footer Modal --}}
-        <div class="px-6 py-4 bg-gray-50 rounded-b-2xl text-right">
-            <button id="closeModal" class="px-6 py-2 bg-blue-600 text-white text-base font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                Tutup
-            </button>
+        <div class="bg-gray-50 px-6 py-3 text-right rounded-b-xl">
+            <button id="closeModalBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold px-6 py-2 rounded-full transition duration-300">Tutup</button>
         </div>
     </div>
 </div>
 
-{{-- ===== SCRIPT JAVASCRIPT UNTUK MODAL (FIXED) ===== --}}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const modal = document.getElementById('kegiatanModal');
-        const modalContent = document.getElementById('modalContent');
-        const modalJudul = document.getElementById('modalJudul');
-        const modalDeskripsi = document.getElementById('modalDeskripsi');
-        const modalTanggal = document.getElementById('modalTanggal');
-        const closeModalBtn = document.getElementById('closeModal');
-        const kegiatanItems = document.querySelectorAll('.kegiatan-item');
+    const form = document.getElementById('formKegiatan');
+    const judulInput = document.getElementById('judulKegiatan');
+    const isiInput = document.getElementById('deskripsiKegiatan');
+    const tanggalInput = document.getElementById('tanggalKegiatan');
+    const tanggalError = document.getElementById('tanggalError');
+    const btnPublikasikan = document.getElementById('btnPublikasikan');
 
-        const openModal = (judul, deskripsi, tanggal) => {
-            modalJudul.textContent = judul;
-            modalDeskripsi.textContent = deskripsi || 'Tidak ada deskripsi.';
-            modalTanggal.textContent = tanggal;
-            modal.classList.remove('hidden');
-            modal.classList.add('flex'); 
-        };
+    function isValidDate() {
+        const selected = new Date(tanggalInput.value);
+        const today = new Date();
+        selected.setHours(0, 0, 0, 0);
+        today.setHours(0, 0, 0, 0);
+        return selected >= today;
+    }
 
-        const closeModal = () => {
+    function validateForm() {
+        const isJudulValid = judulInput.value.length >= 5;
+        const isIsiValid = isiInput.value.length >= 10;
+        const isTanggalValid = isValidDate();
+
+        tanggalError.classList.toggle('hidden', isTanggalValid);
+
+        const allValid = isJudulValid && isIsiValid && isTanggalValid;
+
+        btnPublikasikan.disabled = !allValid;
+        btnPublikasikan.classList.toggle('bg-gray-400', !allValid);
+        btnPublikasikan.classList.toggle('bg-blue-600', allValid);
+        btnPublikasikan.classList.toggle('cursor-not-allowed', !allValid);
+        btnPublikasikan.classList.toggle('cursor-pointer', allValid);
+    }
+
+    judulInput.addEventListener('input', validateForm);
+    isiInput.addEventListener('input', validateForm);
+    tanggalInput.addEventListener('input', validateForm);
+</script>
+
+
+<!-- // Detail Acara // -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('kegiatanModal');
+    const modalContent = document.getElementById('modalContent');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const modalJudul = document.getElementById('modalJudul');
+    const modalTanggal = document.getElementById('modalTanggal');
+    const modalDeskripsi = document.getElementById('modalDeskripsi');
+
+    // Fungsi untuk membuka modal
+    function openModal() {
+        modal.classList.remove('hidden');
+        // Efek transisi saat modal muncul
+        setTimeout(() => {
+            modalContent.classList.remove('scale-95', 'opacity-0');
+            modalContent.classList.add('scale-100', 'opacity-100');
+        }, 50); // delay singkat untuk memastikan transisi berjalan
+    }
+
+    // Fungsi untuk menutup modal
+    function closeModal() {
+        modalContent.classList.add('scale-95', 'opacity-0');
+        modalContent.classList.remove('scale-100', 'opacity-100');
+        setTimeout(() => {
             modal.classList.add('hidden');
-            modal.classList.remove('flex'); 
-        };
+        }, 300); // Sesuaikan dengan durasi transisi
+    }
 
-        kegiatanItems.forEach(item => {
-            item.addEventListener('click', function (event) {
-                event.stopPropagation();
-                const judul = this.dataset.judul;
-                const deskripsi = this.dataset.deskripsi;
-                const tanggal = this.dataset.tanggal;
-                openModal(judul, deskripsi, tanggal);
-            });
-        });
+    // Event listener untuk setiap item kegiatan
+    document.querySelectorAll('.kegiatan-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            // Mengambil data dari atribut data-*
+            const judul = e.currentTarget.dataset.judul;
+            const tanggal = e.currentTarget.dataset.tanggal;
+            const deskripsi = e.currentTarget.dataset.deskripsi;
 
-        closeModalBtn.addEventListener('click', closeModal);
+            // Memasukkan data ke dalam modal
+            modalJudul.textContent = judul;
+            modalTanggal.textContent = tanggal;
+            modalDeskripsi.textContent = deskripsi;
 
-        modal.addEventListener('click', function (event) {
-            if (!modalContent.contains(event.target)) {
-                closeModal();
-            }
-        });
-
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
-                closeModal();
-            }
+            openModal();
         });
     });
+
+    // Event listener untuk tombol tutup
+    closeModalBtn.addEventListener('click', closeModal);
+
+    // Event listener untuk menutup modal saat mengklik di luar konten modal
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+
+    // Menutup modal dengan tombol Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+            closeModal();
+        }
+    });
+});
 </script>
+
 @endsection
